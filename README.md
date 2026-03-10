@@ -1,4 +1,6 @@
 # Team 6632's FRC Scouting App 2026
+<img width="1446" height="1022" alt="image" src="https://github.com/user-attachments/assets/7bc67cde-eb00-4dfe-9708-3dfaebfec22e" />
+
 This app is designed for almost any device, and it was specifically designed to work with school chromebooks without Wifi.
 
 To download, press the green "Code" button, then press **Download ZIP**. After it is finished, extract the ZIP file and open the new folder. After that, open dashboard.html or index.html to start logging!

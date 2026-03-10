@@ -1,0 +1,17 @@
+{
+  "name": "Team 6632 Scouting",
+  "short_name": "6632 Scout",
+  "description": "FRC match scouting app for Northview Robotics Team 6632",
+  "start_url": "./dashboard.html",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

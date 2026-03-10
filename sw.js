@@ -1,8 +1,9 @@
-const CACHE = 'scouting-6632-v1';
+const CACHE = 'scouting-6632-v2';
 
 const ASSETS = [
   './',
   './index.html',
+  './scout.html',
   './overview.html',
   './dashboard.html',
   './manifest.json',

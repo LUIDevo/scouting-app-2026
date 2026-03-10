@@ -1,395 +1,808 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard · Team 6632 Scouting</title>
   </head>
   <body>
     <div class="content-container">
       <div class="content">
         <div class="top-content">
-          <div class="header">Your scouting logs</div>
+          <div class="header-block">
+            <div class="eyebrow">Team 6632 · Scouting</div>
+            <div class="header">Your logs</div>
+          </div>
           <div class="button-container">
-            <button onclick="clearLogs()" class="clear-log">Clear all logs</button>
-            <button onclick="copyToClipboard()" class="spreadsheet"><svg width="800px" height="800px" style="zoom: 0.25" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M10 7.99542V10H8V7.99542H10Z" fill="#000000"/>
-<path d="M10 4.99738V6.99542H8V4.99738H10Z" fill="#000000"/>
-<path d="M7 4.99738H5V6.99542H7V4.99738Z" fill="#000000"/>
-<path d="M7 7.99542H5V10H7V7.99542Z" fill="#000000"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M1 1.5C1 0.671573 1.67157 0 2.5 0H10.7071L14 3.29289V13.5C14 14.3284 13.3284 15 12.5 15H2.5C1.67157 15 1 14.3284 1 13.5V1.5ZM11 3.99738H4V11H11V3.99738Z" fill="#000000"/> </svg></button>
-            <button onclick="clicked()" class="new-log">Create new log</button>
+            <button onclick="clearLogs()" class="btn btn-danger">Clear logs</button>
+            <button onclick="copyToClipboard()" class="btn btn-export">
+              <svg width="12" height="12" viewBox="0 0 15 15" fill="none" style="flex-shrink:0">
+                <path d="M10 7.99542V10H8V7.99542H10Z" fill="currentColor"/>
+                <path d="M10 4.99738V6.99542H8V4.99738H10Z" fill="currentColor"/>
+                <path d="M7 4.99738H5V6.99542H7V4.99738Z" fill="currentColor"/>
+                <path d="M7 7.99542H5V10H7V7.99542Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 1.5C1 0.671573 1.67157 0 2.5 0H10.7071L14 3.29289V13.5C14 14.3284 13.3284 15 12.5 15H2.5C1.67157 15 1 14.3284 1 13.5V1.5ZM11 3.99738H4V11H11V3.99738Z" fill="currentColor"/>
+              </svg>
+              Export
+            </button>
+            <button onclick="openScoutPopup()" class="btn">+ New scout</button>
+            <button onclick="clicked()" class="btn btn-primary">+ New log</button>
+						<button onclick="openAuthPopup()" class="btn btn-export" title="Admin Settings">
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+						</button>
+						<button onclick="secureSync()" class="btn btn-export" title="Sync to server">
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+							Sync
+						</button>
           </div>
         </div>
-        <div id="card-container" class="card-container"> </div>
+
+        <div id="card-container" class="card-container"></div>
       </div>
     </div>
+
     <div class="notification" id="notification"></div>
+
+    <!-- Clear logs popup -->
     <div class="log-popup-container" id="popup-container">
       <div class="popup">
-        <b>Warning:</b><span id="finalPopupText"> This will wipe all data on this page with no way to recover it. Make sure to confirm ONLY if you have already pasted the data into the spreadsheet.</span>
-        <div style="display: flex; justify-content: flex-end;">
-          <button class="cancel" onclick="closePopup('popup-container')">Cancel</button>
-          <button onclick="confirm1()">Confirm</button>
+        <div class="popup-icon">⚠</div>
+        <div class="popup-body">
+          <b>Warning</b>
+          <span>This will wipe all data with no way to recover it. Only confirm if you've already exported your data.</span>
+        </div>
+        <div class="popup-actions">
+          <button class="btn btn-ghost" onclick="closePopup('popup-container')">Cancel</button>
+          <button class="btn btn-danger-solid" onclick="confirm1()">Confirm</button>
         </div>
       </div>
     </div>
 
-  <div class="log-popup-container " id="second-popup-container">
-    <div class="popup secondary">
-      <b>Final Warning:</b> Are you really really really sure you want to delete all the logs? This cannot be undone.
-      <div style="display: flex; justify-content: flex-end;">
-        <button class="cancel" onclick="closePopup('second-popup-container')">Cancel</button>
-        <button onclick="confirmFinal()">Confirm</button>
+    <div class="log-popup-container" id="second-popup-container">
+      <div class="popup">
+        <div class="popup-icon">☢</div>
+        <div class="popup-body">
+          <b>Final warning</b> Are you really sure? This cannot be undone.
+        </div>
+        <div class="popup-actions">
+          <button class="btn btn-ghost" onclick="closePopup('second-popup-container')">Cancel</button>
+          <button class="btn btn-danger-solid" onclick="confirmFinal()">Delete everything</button>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- New scout popup -->
+    <div class="log-popup-container" id="scout-popup-container">
+      <div class="popup">
+        <div class="popup-label">New scout profile</div>
+        <div class="popup-body">
+          <span>Enter your name. It will be saved and available to autofill on new logs.</span>
+        </div>
+        <input
+          id="scout-name-input"
+          class="popup-input"
+          type="text"
+          placeholder="eg. Jane D."
+          maxlength="40"
+          onkeydown="if(event.key==='Enter') saveScout()"
+          autocomplete="off"
+        />
+        <div id="scout-error" class="scout-error" style="display:none">Please enter a name.</div>
+        <div class="popup-actions">
+          <button class="btn btn-ghost" onclick="closePopup('scout-popup-container')">Cancel</button>
+          <button class="btn btn-primary" onclick="saveScout()">Save profile</button>
+        </div>
+      </div>
+    </div>
+		<div class="log-popup-container" id="auth-popup-container">
+			<div class="popup">
+				<div class="popup-label">Admin Settings</div>
+				<div class="popup-body">
+					<b>Device Security</b>
+					<span>Set the secret key and your PIN. These are required for secure data transmission.</span>
+				</div>
+
+				<div style="display:flex; flex-direction:column; gap:10px;">
+					<input id="team-secret-input" class="popup-input" type="password" placeholder="Team Secret (from Lead)" autocomplete="new-password" />
+					<input id="scout-pin-input" class="popup-input" type="text" placeholder="Your 4-Digit PIN" maxlength="4" autocomplete="off" />
+					<input id="server-url-input" class="popup-input" type="url" placeholder="Server URL (eg. https://...)" autocomplete="off" />
+				</div>
+
+				<div class="popup-actions">
+					<button class="btn btn-ghost" onclick="closePopup('auth-popup-container')">Cancel</button>
+					<button class="btn btn-primary" onclick="saveAuthSettings()">Save Config</button>
+				</div>
+			</div>
+		</div>
     <script>
+// ── Scout profiles ──────────────────────────────────────────
+function getScouts() {
+  try { return JSON.parse(localStorage.getItem("scouts") || "[]"); } catch { return []; }
+}
+function saveScouts(arr) {
+  localStorage.setItem("scouts", JSON.stringify(arr));
+}
+
+function openScoutPopup() {
+  const input = document.getElementById("scout-name-input");
+  input.value = "";
+  document.getElementById("scout-error").style.display = "none";
+  const p = document.getElementById("scout-popup-container");
+  p.style.display = "flex";
+  p.style.animation = "appear 0.2s ease-out forwards";
+  p.style.pointerEvents = "auto";
+  setTimeout(() => input.focus(), 50);
+}
+
+function saveScout() {
+  const input = document.getElementById("scout-name-input");
+  const name = input.value.trim();
+  const errEl = document.getElementById("scout-error");
+  if (!name) { errEl.style.display = "block"; return; }
+  errEl.style.display = "none";
+  const scouts = getScouts();
+  if (!scouts.includes(name)) {
+    scouts.push(name);
+    saveScouts(scouts);
+  }
+  closePopup("scout-popup-container");
+  showNotification("Profile saved: " + name);
+}
+
+// ── Navigation ───────────────────────────────────────────────
+function clicked() {
+	let scouts=localStorage.getItem("scouts");
+	console.log(scouts);
+	window.location.href = `index.html?data=${encodeURIComponent(JSON.stringify(scouts))}`; 
+}
+
+// ── Clear logs ───────────────────────────────────────────────
 function clearLogs() {
-  let popupContainer = document.getElementById('popup-container');
-  popupContainer.style.display = 'flex'; // Show the first popup
-  popupContainer.style.animation = 'appear 0.3s ease-in-out forwards';
-  popupContainer.style.pointerEvents = 'auto';
+  let p = document.getElementById('popup-container');
+  p.style.display = 'flex';
+  p.style.animation = 'appear 0.2s ease-out forwards';
+  p.style.pointerEvents = 'auto';
 }
-
-function closePopup(popupId) {
-  let popupContainer = document.getElementById(popupId);
-  popupContainer.style.animation = 'fadeOut 0.3s forwards ease-in-out';
-  setTimeout(() => {
-    popupContainer.style.display = 'none';
-  }, 300);
+function closePopup(id) {
+  let p = document.getElementById(id);
+  p.style.animation = 'fadeOut 0.2s forwards ease-in-out';
+  setTimeout(() => { p.style.display = 'none'; }, 200);
 }
-
 function confirm1() {
-  let secondPopup = document.getElementById('second-popup-container');
-  secondPopup.style.display = 'flex'; // Show the second confirmation popup
-  secondPopup.style.animation = 'appear 0.3s ease-in-out forwards';
-  secondPopup.style.pointerEvents = 'auto';
+  let p = document.getElementById('second-popup-container');
+  p.style.display = 'flex';
+  p.style.animation = 'appear 0.2s ease-out forwards';
+  p.style.pointerEvents = 'auto';
 }
-
 function confirmFinal() {
-  showNotification("Alright, if you say so...");
+  showNotification("Clearing...");
   closePopup('popup-container');
   closePopup('second-popup-container');
-  try {
-    localStorage.clear();
-    console.log("ere")
-  } catch(err) {
-    console.log("err")
-    showNotification(err);
-  }
-  setTimeout(() => {
-    showNotification("Logs cleared successfully! Please wait while the page reloads.");
-  }, 1500); // Delay to give time for the message to be seen
-  setTimeout(() => {
-  window.location.href = "dashboard.html";
-  }, 3000); // Delay to give time for the message to be seen
+  const scouts = getScouts();
+  try { localStorage.clear(); } catch(err) { showNotification(String(err), true); }
+  saveScouts(scouts); // preserve profiles after wipe
+  setTimeout(() => showNotification("Logs cleared. Reloading..."), 1500);
+  setTimeout(() => { window.location.href = "dashboard.html"; }, 3000);
 }
 
-    function clicked() {
-      window.location.href = "index.html";
-    }
-    function copyToClipboard() {
-      let rows = [];
-      let keys = [
-        "matchNumber", "teamNumber", "scoutId", "teamPosition", "teamColor", 
-        "num_human_goals", "num_processor_goals", "num_missed_goals", "num_net_goals", 
-        "num_l1", "num_l2", "num_l3", "num_l4", "climbLevel", "penalty", "coopertition", "comments", "autoComments"
-      ];
-      rows.push(keys.join("\t"));
+// ── Export ───────────────────────────────────────────────────
+function copyToClipboard() {
+  const keys = ["matchNumber","matchType","teamNumber","scoutProfile","autoFuel","autoClimb","autoNotes","fuel","fuelMissed","intakeType","towerLevel","notes"];
+  const rows = [];
+  // const rows = [keys.join("\t")];
+  Object.keys(localStorage).forEach((key) => {
+    if (!key.startsWith("match_")) return;
+    const game = JSON.parse(localStorage.getItem(key));
+    rows.push(keys.map((k) => (game && typeof game[k] !== "undefined" ? game[k] : "")).join("\t"));
+  });
+  navigator.clipboard.writeText(rows.join("\n"))
+    .then(() => showNotification("Copied to clipboard"))
+    .catch((err) => showNotification("Failed: " + err, true));
+}
 
-      Object.keys(localStorage).forEach(key => {
-        if (!key.startsWith("match_")) return;
-        let game = JSON.parse(localStorage.getItem(key));
-        let row = keys.map(k => game[k] || "").join("\t");
-        rows.push(row);
-      });
+// ── Notification ─────────────────────────────────────────────
+function showNotification(message, isError = false) {
+  const n = document.getElementById("notification");
+  n.textContent = message;
+  n.style.backgroundColor = isError ? "#1a0a0a" : "#0a0a0a";
+  n.style.color = isError ? "#f87171" : "#3b82f6";
+  n.style.border = isError ? "1px solid rgba(248,113,113,0.25)" : "1px solid rgba(59,130,246,0.35)";
+  n.style.animation = "none";
+  n.offsetHeight;
+  n.style.animation = "fadeIn 0.3s forwards ease-in-out";
+  clearTimeout(n._t);
+  n._t = setTimeout(() => { n.style.animation = "fadeOut 0.3s forwards ease-in-out"; }, 3000);
+}
 
-      let csvData = rows.join("\n");
-      navigator.clipboard.writeText(csvData).then(() => {
-        showNotification("Data copied to clipboard!");
-      }).catch(err => {
-          showNotification("Failed to copy data: " + err, true);
-        });
-    }
-    function showNotification(message, isError = false) {
-      const notification = document.getElementById("notification");
-      notification.textContent = message;
-      notification.style.position = "absolute";
-      notification.style.bottom = 0;
-      notification.style.right= 0;
-      notification.style.backgroundColor = isError ? "#FF4C4C" : "#8BED8F";
-      notification.style.color = "black";
-      notification.style.padding = "10px";
-      notification.style.margin = "10px 0";
-      notification.style.borderRadius = "5px";
-      notification.style.textAlign = "center";
-        notification.style.animation= "fadeIn 0.3s forwards ease-in-out";
+// ── Save & load games ─────────────────────────────────────────
+function saveGameToLocalStorage() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const matchNumber = params.get("matchNumber");
+    if (!matchNumber) return;
+    const matchType = params.get("matchType") || "";
+    const gameData = {
+      matchNumber,
+      matchType,
+      teamNumber: params.get("teamNumber") || "N/A",
+      scoutProfile: params.get("scoutProfile") || "N/A",
+      autoFuel: Number(params.get("autoFuel") || 0),
+      autoClimb: params.get("autoClimb") || "N/A",
+      autoNotes: params.get("autoNotes") || "No auto notes",
+      fuel: Number(params.get("fuel") || 0),
+      fuelMissed: Number(params.get("fuelMissed") || 0),
+      intakeType: params.get("intakeType") || "N/A",
+      towerLevel: params.get("towerLevel") || "N/A",
+      notes: params.get("notes") || "No notes",
+    };
+    const storageKey = matchType ? `match_${matchType}_${matchNumber}` : `match_${matchNumber}`;
+    localStorage.setItem(storageKey, JSON.stringify(gameData));
+    showNotification("Saved successfully");
+  } catch (error) {
+    showNotification("Error saving: " + error.message, true);
+  }
+}
+// ── Security & Auth ──────────────────────────────────────────
+function openAuthPopup() {
+  const p = document.getElementById("auth-popup-container");
+  document.getElementById("team-secret-input").value = localStorage.getItem("team_secret") || "";
+  document.getElementById("scout-pin-input").value = localStorage.getItem("scout_pin") || "";
+  document.getElementById("server-url-input").value = localStorage.getItem("server_url") || "";
+  p.style.display = "flex";
+  p.style.animation = "appear 0.2s ease-out forwards";
+}
 
-      setTimeout(() => {
-        notification.style.animation= "fadeOut 0.3s forwards ease-in-out";
-      }, 3000);
-    }
+function saveAuthSettings() {
+  const secret = document.getElementById("team-secret-input").value.trim();
+  const pin = document.getElementById("scout-pin-input").value.trim();
+  const url = document.getElementById("server-url-input").value.trim();
 
-    function saveGameToLocalStorage() {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const matchNumber = params.get("matchNumber");
-        if (!matchNumber) return;
+  if (!secret || pin.length < 4) {
+    showNotification("Invalid Secret or PIN (4 digits)", true);
+    return;
+  }
 
-        const gameData = {
-          matchNumber,
-          teamNumber: params.get("teamNumber") || "N/A",
-          scoutId: params.get("scoutId") || "N/A",
-          teamPosition: params.get("teamPosition") || "N/A",
-          teamColor: params.get("teamColor") || "N/A",
-          num_human_goals: params.get("num_human_goals") || 0,
-          num_processor_goals: params.get("num_processor_goals") || 0,
-          num_missed_goals: params.get("num_missed_goals") || 0,
-          num_net_goals: params.get("num_net_goals") || 0,
-          num_l1: params.get("num_l1") || 0,
-          num_l2: params.get("num_l2") || 0,
-          num_l3: params.get("num_l3") || 0,
-          num_l4: params.get("num_l4") || 0,
-          climbLevel: params.get("climbLevel") || "N/A",
-          penalty: params.get("penalty") || "N/A",
-          coopertition: params.get("coopertition") || "N/A",
-          comments: params.get("comments") || "No comments",
-          autoComments: params.get("autoComments") || "No comments"
-        };
+  localStorage.setItem("team_secret", secret);
+  localStorage.setItem("scout_pin", pin);
+  if (url) localStorage.setItem("server_url", url);
 
-        localStorage.setItem(`match_${matchNumber}`, JSON.stringify(gameData));
-        showNotification("Game data saved successfully!");
-      } catch (error) {
-        showNotification("Error saving game data: " + error.message, true);
-      }
-    }
+  closePopup("auth-popup-container");
+  showNotification("Security config updated.");
+}
+
+// ── Secure Post ───────────────────────────────────────────────
+async function secureSync() {
+  const secret = localStorage.getItem("team_secret");
+  const pin = localStorage.getItem("scout_pin");
+  const url = localStorage.getItem("server_url");
+
+  if (!secret || !pin) {
+    showNotification("Set Secret & PIN first!", true);
+    openAuthPopup();
+    return;
+  }
+  if (!url) {
+    showNotification("Set a Server URL first!", true);
+    openAuthPopup();
+    return;
+  }
+
+  const logs = Object.keys(localStorage)
+    .filter(k => k.startsWith("match_"))
+    .map(k => {
+      const g = JSON.parse(localStorage.getItem(k));
+ return {
+        matchNumber:  Number(g.matchNumber) || 0,
+        matchType:    g.matchType           || "",
+        teamNumber:   Number(g.teamNumber)  || 0,
+        scoutProfile: g.scoutProfile        || "",
+        autoFuel:     Number(g.autoFuel)    || 0,
+        autoClimb:    g.autoClimb           || "",
+        autoNotes:    g.autoNotes           || "",
+        fuel:         Number(g.fuel)        || 0,
+        fuelMissed:   Number(g.fuelMissed)  || 0,
+        intakeType:   g.intakeType          || "",
+        towerLevel:   g.towerLevel          || "",
+        notes:        g.notes               || ""
+      };
+    });
+
+  if (logs.length === 0) { showNotification("No data to sync", true); return; }
+
+  showNotification("Syncing...");
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        scoutPin:    Number(pin),
+        eventSecret: secret,
+        logs
+      })
+    });
+
+    if (response.ok) showNotification("Synced " + logs.length + " log(s) successfully!");
+    else showNotification("Server error: " + response.status, true);
+  } catch (err) {
+    showNotification("Network error — check URL and try again.", true);
+    console.error(err);
+  }
+}
+const matchTypeLabels = { pm: "Practice", qm: "Qual", sf: "Playoff", f: "Final" };
 
 function loadGames() {
   const container = document.getElementById("card-container");
   container.innerHTML = "";
-
-  // Check if there are any match logs
-  const matchKeys = Object.keys(localStorage).filter(key => key.startsWith("match_"));
-  
+  const matchKeys = Object.keys(localStorage).filter((k) => k.startsWith("match_"));
   if (matchKeys.length === 0) {
-    // If no match logs, show a message
-    const noLogsMessage = document.createElement("p");
-    noLogsMessage.className = "no-logs-message";
-    noLogsMessage.innerHTML = "Looks like you don't have any logs yet. Click 'Create new log' to start!";
-    container.appendChild(noLogsMessage);
-  } else {
-    // If match logs exist, create the cards
-    matchKeys.forEach(key => {
-      const game = JSON.parse(localStorage.getItem(key));
-
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="card-content">
-          <h3>Match ${game.matchNumber}</h3>
-          <p>Team: ${game.teamNumber}</p>
-          <p>Scout: ${game.scoutId}</p>
-          <p>Comments: ${game.comments}</p>
-          <button onclick="viewGame('${game.matchNumber}')">View Details</button>
-        </div>
-      `;
-      container.appendChild(card);
-    });
+    const msg = document.createElement("p");
+    msg.className = "no-logs-message";
+    msg.innerHTML = "No logs yet. Hit <strong>+ New log</strong> to start scouting.";
+    container.appendChild(msg);
+    return;
   }
+  const typeOrder = { f: 0, sf: 1, qm: 2, pm: 3 };
+  matchKeys.sort((a, b) => {
+    const ma = JSON.parse(localStorage.getItem(a)) || {};
+    const mb = JSON.parse(localStorage.getItem(b)) || {};
+    const typeA = typeOrder[ma.matchType] ?? 99;
+    const typeB = typeOrder[mb.matchType] ?? 99;
+    if (typeA !== typeB) return typeA - typeB;
+    return Number(mb.matchNumber || 0) - Number(ma.matchNumber || 0);
+  });
+  matchKeys.forEach((key, i) => {
+    const game = JSON.parse(localStorage.getItem(key));
+    if (!game) return;
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.animationDelay = `${i * 0.04}s`;
+    const autoSummary = `${game.autoFuel ?? 0} fuel · ${game.autoClimb || "—"}`;
+    const teleSummary = `${game.fuel ?? 0} scored · ${game.fuelMissed ?? 0} missed`;
+    const baseNotes = (game.notes || game.autoNotes || "No notes").trim();
+    const notesSnippet = baseNotes.length > 120 ? baseNotes.slice(0, 117) + "..." : baseNotes;
+    const detailsId = `details_${game.matchType || ""}_${game.matchNumber}`;
+    const matchTypeLabel = matchTypeLabels[game.matchType] || game.matchType || "";
+    const matchLabel = matchTypeLabel ? `${matchTypeLabel} ${game.matchNumber || "?"}` : `Match ${game.matchNumber || "?"}`;
+    card.innerHTML = `
+      <div class="card-content">
+        <div class="card-main-row">
+          <div class="card-main-left">
+            <div class="card-title-line">
+              <span class="card-match">${matchLabel}</span>
+              <span class="card-sep">/</span>
+              <span class="card-team">Team ${game.teamNumber || "?"}</span>
+            </div>
+            <div class="card-subline">Scout · ${game.scoutProfile || "N/A"}</div>
+          </div>
+          <div class="card-main-right">
+            <div class="metric"><span class="metric-label">Auto</span><span class="metric-value">${autoSummary}</span></div>
+            <div class="metric"><span class="metric-label">Teleop</span><span class="metric-value">${teleSummary}</span></div>
+          </div>
+        </div>
+        <div class="card-notes-snippet">${notesSnippet}</div>
+        <button class="details-toggle" data-target="${detailsId}">Show details</button>
+        <div id="${detailsId}" class="details" hidden>
+          <div class="details-grid">
+            <div>
+              <h4>Info</h4>
+              <p><span class="dl">Match</span>${game.matchNumber || "?"}</p>
+              <p><span class="dl">Type</span>${matchTypeLabels[game.matchType] || game.matchType || "N/A"}</p>
+              <p><span class="dl">Team</span>${game.teamNumber || "?"}</p>
+              <p><span class="dl">Scout</span>${game.scoutProfile || "N/A"}</p>
+            </div>
+            <div>
+              <h4>Auto</h4>
+              <p><span class="dl">Fuel</span>${game.autoFuel ?? 0}</p>
+              <p><span class="dl">Climb</span>${game.autoClimb || "N/A"}</p>
+              <p><span class="dl">Notes</span>${game.autoNotes || "—"}</p>
+            </div>
+            <div>
+              <h4>Teleop</h4>
+              <p><span class="dl">Fuel</span>${game.fuel ?? 0}</p>
+              <p><span class="dl">Missed</span>${game.fuelMissed ?? 0}</p>
+              <p><span class="dl">Intake</span>${game.intakeType || "N/A"}</p>
+              <p><span class="dl">Tower</span>${game.towerLevel || "N/A"}</p>
+            </div>
+            <div class="details-notes">
+              <h4>Notes</h4>
+              <p>${game.notes || "No notes"}</p>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+  container.addEventListener("click", (e) => {
+    const toggle = e.target.closest(".details-toggle");
+    if (!toggle) return;
+    const details = document.getElementById(toggle.getAttribute("data-target"));
+    if (!details) return;
+    const hidden = details.hasAttribute("hidden");
+    hidden ? details.removeAttribute("hidden") : details.setAttribute("hidden", "");
+    toggle.textContent = hidden ? "Hide details" : "Show details";
+  });
 }
 
-    function viewGame(matchNumber) {
-      console.log("viewGame called with matchNumber:", matchNumber);
-
-      const gameData = JSON.parse(localStorage.getItem(`match_${matchNumber}`));
-      console.log("Retrieved gameData:", gameData);
-
-      if (!gameData) return;
-
-      const params = new URLSearchParams(gameData).toString();
-      window.location.href = `game.html?${params}`;
-    }
-
-    window.onload = function() {
-      saveGameToLocalStorage();
-      loadGames();
-    };
+window.onload = function () { saveGameToLocalStorage(); loadGames(); };
     </script>
 
     <style>
-    @font-face {
-      font-family: "Jetbrains";
-      src: url(./fonts/JETBRAINSMONONL-MEDIUM.TTF);
-    }
-    * {
-      box-sizing: border-box;
-    }
-    html {
-      background-color: #1d2021;
-      height: 100vh;
-    }
-    body {
-      margin: 0;
-      font-family: Jetbrains, sans-serif;
-      color: #F9F5D7;
-    }
-    .content-container {
-      padding: 30px;
-      display: flex;
-      margin-bottom: 32px;
-      align-items: center;
-      flex-direction: column;
-    }
-    .content {
-      display: flex;
-      justify-content: space-between;
-      flex-direction: column;
-      background-color: #1D2021;
-      color: #F9F5D7;
-      width: 80%;
-    }
-    .top-content {
-      display: flex;
-      width: 100%;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .header {
-      font-size: 44px;
-      text-align: center;
-      margin-bottom: 2%;
-    }
-    h3 {
-      margin: 8px 0px;
-    }
-    .card {
-      transition: background-color 0.3s ease-in-out;
-      padding: 16px 0px 32px 64px;
-      border-radius: 4px;
-      width: 45%;
-      max-width: 10000px;
-      background-color: #2b2b2d;
-      color: white;
-      border: 1px solid #B1B1B1;
-      margin: 8px;
-      display: flex;
-      flex-direction: column;
-    }
-    .card.active {
-      border: 1px solid #0367FB;
-      background: #CAD5F0;
-    }
-    .button-container {
-      display: flex;
-      gap: 10px;
-    }
-    button {
-      background: #CAD5F0;
-      color: black;
-      border: none;
-      padding: 12px 24px;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 4px;
-      font-family: Jetbrains;
-    }
-    .card-container {
-      flex-wrap: wrap;
-      display: flex;
-      justify-content: space-between;
-    }
-    #notification {
-      animation: fadeIn 0.3s ease-in-out forwards;
-    }
-    @keyframes fadeIn{
-    from {
-      display:initial;
-      bottom: -20px;
-      opacity: 0;
-    } to {
-      bottom: 0px;
-      opacity: 1;
-    }
-    }
-    @keyframes fadeOut{
-    from {
-      bottom: 0px;
-      opacity: 1;
-    } to {
-      bottom: -20px;
-      opacity: 0;
-    }
-    }
-    .spreadsheet {
-      background-color: #8BED8F;
-      color: black;
-      zoom: 0.125;
-      padding: 30px 120px;
-      border-radius: 4px;
-    }
-    .new-log {
-      color: black;
-  
-    }
-    .clear-log {
-    background-color: #9d0006;
-      color: white;
-      font-size: 14px;
-    }
-.log-popup-container {
-  display: none; 
-  position: fixed; 
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6); 
-}
+      :root {
+        --bg:           #0a0a0a;
+        --surface:      #111111;
+        --surface2:     #1a1a1a;
+        --border:       rgba(255, 255, 255, 0.08);
+        --border-hover: rgba(255, 255, 255, 0.18);
+        --text:         #ededed;
+        --text-soft:    #888888;
+        --text-muted:   #505050;
+        --accent:       #3b82f6;
+        --accent-dim:   rgba(59, 130, 246, 0.1);
+        --accent-border:rgba(59, 130, 246, 0.3);
+        --danger:       #ef4444;
+        --mono: 'IBM Plex Mono', monospace;
+        --sans: 'IBM Plex Sans', sans-serif;
+      }
+			@font-face {
+				font-family: "IBM Plex Mono";
+				src: url(./fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf);
+			}
+			@font-face {
+				font-family: "IBM Plex Sans";
+				src: url(./fonts/IBM_Plex_Sans/static/IBMPlexSans-Regular.ttf);
+			}
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { background: var(--bg); min-height: 100vh; }
 
-.popup {
-  background-color: #282828;
-  color: white;
-  border: 2px solid #cc241d;
-  padding: 20px;
-  border-radius: 5px;
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
-  max-width: 400px;
-  text-align: center;
-}
+      body {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: var(--text);
+        background: var(--bg);
+        min-height: 100vh;
+      }
 
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+      .content-container {
+        padding: 36px 20px 48px;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+      }
 
-@keyframes disappear {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-}
-    .cancel {
-    background-color: transparent;
-    color: white;
-    font-size: 14px;
-    }
-.secondary {
-    padding: 5% 5%;
-    border: none;
-}
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        max-width: 960px;
+      }
+
+      .top-content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 8px;
+      }
+
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--accent);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        opacity: 0.8;
+      }
+
+      .header {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+
+      .button-container {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.12s, border-color 0.12s, color 0.12s, opacity 0.1s;
+        line-height: 1.2;
+        background: transparent;
+        color: var(--text-soft);
+      }
+
+      .btn:active { opacity: 0.7; }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+      .btn-primary:hover { background: #2563eb; border-color: #2563eb; }
+
+      .btn-export:hover { color: var(--text); border-color: var(--border-hover); }
+      .btn-danger:hover { color: #f87171; border-color: rgba(248,113,113,0.3); }
+
+      .btn-danger-solid {
+        background: rgba(185,28,28,0.15);
+        color: #f87171;
+        border-color: rgba(248,113,113,0.25);
+      }
+      .btn-danger-solid:hover { background: rgba(185,28,28,0.28); }
+
+      .btn-ghost { color: var(--text-muted); }
+      .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); }
+
+      .card-container { display: flex; flex-direction: column; gap: 6px; }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px 16px;
+        transition: border-color 0.14s, background 0.14s;
+        animation: cardIn 0.25s ease-out both;
+      }
+
+      @keyframes cardIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .card:hover { border-color: var(--border-hover); background: var(--surface2); }
+      .card-content { display: flex; flex-direction: column; gap: 8px; }
+
+      .card-main-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .card-main-left { display: flex; flex-direction: column; gap: 3px; }
+
+      .card-title-line {
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .card-sep { color: var(--text-muted); font-weight: 400; }
+      .card-team { font-weight: 400; color: var(--text-muted); font-size: 13px; }
+
+      .card-subline {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text-muted);
+        letter-spacing: 0.04em;
+      }
+
+      .card-main-right { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+      .metric {
+        padding: 3px 10px;
+        border-radius: 999px;
+        background: var(--accent-dim);
+        border: 1px solid rgba(59,130,246,0.18);
+        display: flex;
+        gap: 7px;
+        font-family: var(--mono);
+        font-size: 11px;
+        align-items: center;
+      }
+
+      .metric-label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+        font-size: 9px;
+        opacity: 0.85;
+      }
+
+      .metric-value { color: var(--text); }
+
+      .card-notes-snippet {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      .details-toggle {
+        align-self: flex-start;
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-family: var(--mono);
+        cursor: pointer;
+        transition: color 0.12s, border-color 0.12s;
+      }
+      .details-toggle:hover { color: var(--text); border-color: var(--border-hover); }
+
+      .details {
+        margin-top: 4px;
+        border-radius: 6px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        padding: 12px 14px;
+      }
+
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        font-family: var(--mono);
+        font-size: 11px;
+      }
+
+      .details-grid h4 {
+        font-family: var(--sans);
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        margin-bottom: 8px;
+        opacity: 0.85;
+      }
+
+      .details-grid p {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 4px;
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      .dl { color: var(--text-muted); min-width: 46px; flex-shrink: 0; }
+
+      .details-notes {
+        grid-column: 1 / -1;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+      }
+      .details-notes p { color: var(--text-muted); line-height: 1.6; }
+
+      #notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        z-index: 9999;
+        pointer-events: none;
+      }
+
+      .log-popup-container {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        inset: 0;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(4px);
+      }
+
+      .popup {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 340px;
+        width: 90%;
+      }
+
+      .popup-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.13em;
+        color: var(--accent);
+      }
+
+      .popup-icon { font-size: 18px; color: var(--accent); }
+
+      .popup-body {
+        font-size: 13px;
+        color: var(--text-soft);
+        line-height: 1.6;
+      }
+      .popup-body b { color: var(--text); font-weight: 600; display: block; margin-bottom: 4px; }
+
+      .popup-input {
+        font-family: var(--sans);
+        font-size: 13px;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+        padding: 9px 12px;
+        background: var(--surface2);
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.12s, box-shadow 0.12s;
+        width: 100%;
+      }
+
+      .popup-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+      }
+
+      .popup-input::placeholder { color: var(--text-muted); }
+
+      .scout-error {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: #f87171;
+        margin-top: -6px;
+        letter-spacing: 0.02em;
+      }
+
+      .popup-actions { display: flex; justify-content: flex-end; gap: 6px; }
+
+      .no-logs-message {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-muted);
+        padding: 28px 0;
+      }
+      .no-logs-message strong { color: var(--text); }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to   { opacity: 0; transform: translateY(6px); }
+      }
+      @keyframes appear {
+        from { opacity: 0; transform: scale(0.96); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+
+      @media (max-width: 720px) {
+        .header { font-size: 22px; }
+        .details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 520px) {
+        .details-grid { grid-template-columns: minmax(0, 1fr); }
+        .top-content { align-items: flex-start; }
+      }
     </style>
   </body>
 </html>

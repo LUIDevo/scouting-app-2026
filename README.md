@@ -1,8 +1,11 @@
-![image](https://github.com/user-attachments/assets/5b9c2089-f4fa-4c96-bb2d-59294f2052a0)
-# Team 6632's Scouting App
+# Team 6632's FRC Scouting App 2026
 This app is designed for almost any device, and it was specifically designed to work with school chromebooks without Wifi.
 
 To download, press the green "Code" button, then press **Download ZIP**. After it is finished, extract the ZIP file and open the new folder. After that, open dashboard.html or index.html to start logging!
+
+In order to sync, go to the password button in the top right of the dashboard page, and input the fields as described by your lead, then press save.
+
+You can prefill your user by pressing new scout button(next to the new log button)
 
 ## This app has been **tested**, but there still might be some problems. To limit them, here are some things to be careful of:
 - If you put the same match number as a previous log, it will **overwrite the log.** This means that you cant have 2 teams being scouted at the same time on one laptop. __One laptop per robot at a time.__

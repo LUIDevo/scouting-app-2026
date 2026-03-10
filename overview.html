@@ -1,595 +1,685 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Overview</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fuel & Notes · Team 6632 Scouting</title>
     <style>
-.notifications-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 999;
-}
+      :root {
+        --bg:            #0a0a0a;
+        --surface:       #111111;
+        --surface2:      #1a1a1a;
+        --border:        rgba(255, 255, 255, 0.08);
+        --border-hover:  rgba(255, 255, 255, 0.16);
+        --text:          #ededed;
+        --text-soft:     #888888;
+        --text-muted:    #505050;
+        --accent:        #3b82f6;
+        --accent-dim:    rgba(59, 130, 246, 0.1);
+        --accent-border: rgba(59, 130, 246, 0.35);
+        --danger:        #ef4444;
+        --danger-dim:    rgba(239, 68, 68, 0.1);
+        --mono: 'IBM Plex Mono', monospace;
+        --sans: 'IBM Plex Sans', sans-serif;
+      }
+			@font-face {
+				font-family: "IBM Plex Mono";
+				src: url(./fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf);
+			}
+			@font-face {
+				font-family: "IBM Plex Sans";
+				src: url(./fonts/IBM_Plex_Sans/static/IBMPlexSans-Regular.ttf);
+			}
+      * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.notification {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  opacity: 0;
-  animation: fadeInOut 4s forwards;
-}
+      html, body {
+        width: 100%;
+        height: 100%;
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--text);
+      }
 
-.notification.error {
-  background-color: #f44336;
-}
+      .app-shell {
+        min-height: 100vh;
+        padding: 20px 16px 32px;
+        display: flex;
+        justify-content: center;
+      }
 
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  20% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-}
-.position-question-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-span {
-  color: white;
-}
-.header-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-[role="button"] {
-  all: unset;   padding: 0;
-  background: none;
-  border: none;
-  text-align: inherit;
-  cursor: inherit;
-}
-#human, #middle, #opposite {
-  border: 1px solid #818181;
-}
-#human.active, #middle.active, #opposite.active {
-  border: 1px solid #0367FB;
-  background-color: #CAD5F0;
-}
-.position-container {
-  margin-top: 2px;
-  margin-bottom: 16px;
-  display: flex;
-  gap: 16px;
-}
-.submit-button {
-  font-family: Jetbrains;
-  font-size: 16px;
-  width: 100%;
-  border-radius: 4px;
-  background-color: #CAD5F0;
-  color: black;
-  padding: 12px 0px;
-  margin-top: 2%;
-  margin-bottom: 60px;
-}
-@font-face {
-  font-family: "Jetbrains";
-  src: url(./fonts/JETBRAINSMONONL-MEDIUM.TTF);
-}
-.flex {
-  display: flex;
-}
-* {
-  box-sizing: border-box;
-}
+      .page {
+        width: 100%;
+        max-width: 960px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+        gap: 14px;
+        align-items: start;
+      }
 
-.sub-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-input {
-  font-family: Jetbrains;
-  border: 1px solid #818181;
-  border-radius: 4px;
-  padding: 8px 24px;
-}
-.input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+      @media (max-width: 800px) {
+        .page { grid-template-columns: minmax(0, 1fr); }
+      }
 
-html {
-  background-color: #1d2021;
-  height: 100vh;
-}
-body {
-  margin: 0;
-  font-family: Jetbrains, sans-serif;
-}
-.content {
-  display: flex;
-  justify-content: space-between;
-  background-color: #1D2021;
-  color: #F9F5D7;
-}
-.content-container {
-  padding: 30px;
-  display: flex;
-  margin-bottom: 32px;
-  align-items: center;
-  flex-direction: column;
-}
-.left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  justify-content: space-between;
-  width: 100%;
-}
-.right {
-  min-width: 400px;
-  align-items: flex-end;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.card {
-  transition: background-color 0.3s ease-in-out;
-  padding: 8px 24px;
-  display: flex;
-  border-bottom: 4px;
-  border-radius: 4px;
-  align-items: center;
-  width: 50%;
-  justify-content: center;
-  background-color: #F9F5D7;
-  color: black;
-  border: 1px solid #B1B1B1;
-}
-.card-container-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-    font-size: 12px;
-}
-.card-container {
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  display: flex;
-  gap: 16px;
-}
-.header {
-  font-size: 44px;
-  text-align: center;
-  margin-bottom: 2%;
-}
-.underline {
-  height: 2px;
-  background-color: #ffff;
-  width: 100%;
-}
-.counter {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+      /* Cards */
+      .card {
+        background: var(--surface);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-}
-.counter-container {
-  background: #282828;
-  padding: 8px 16px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  width: 62%;
-  justify-content: space-between;
-  min-width: 300px;
-  text-align: center;
-}
-.counter-label {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-label {
-  font-size: 14px;
-  letter-spacing: -0.2px;
-}
-.counter-value {
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  margin: 5px 0;
-}
-.button-container {
-  display: flex;
-  gap: 10px;
-}
-button {
-  background: #CAD5F0;
-  color: black;
-  border: none;
-  padding: 8px 12px;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-.card.active {
-  border: 1px solid #0367FB;
-  background: #CAD5F0;
-}
-</style>
+      .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+      .card-header-left { display: flex; flex-direction: column; gap: 3px; }
+
+      .card-title {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text);
+        letter-spacing: -0.01em;
+      }
+
+      .card-subtitle {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .pill {
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 10px;
+        background: var(--accent-dim);
+        border: 1px solid var(--accent-border);
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        letter-spacing: 0.04em;
+        flex-shrink: 0;
+      }
+      .pill-dot { width: 5px; height: 5px; border-radius: 999px; background: var(--accent); }
+
+      /* Section label */
+      .section-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      /* Summary grid */
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .summary-chip {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        padding: 9px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .summary-label {
+        font-family: var(--mono);
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--text-muted);
+      }
+
+      .summary-value {
+        font-size: 13px;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .summary-notes {
+        font-size: 11px;
+        color: var(--text-soft);
+        max-height: 36px;
+        overflow: hidden;
+        line-height: 1.4;
+      }
+
+      /* Fuel buttons */
+      .fuel-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .fuel-button {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        padding: 22px 16px;
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 55%, #60a5fa 100%);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: filter 0.1s, transform 0.08s, box-shadow 0.1s;
+        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.25);
+      }
+
+      .fuel-button:hover {
+        filter: brightness(1.08);
+        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.35);
+      }
+
+      .fuel-button:active { transform: scale(0.98); filter: brightness(0.96); }
+
+      .fuel-button-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .fuel-button-sub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .fuel-count {
+        font-family: var(--mono);
+        font-size: 36px;
+        font-variant-numeric: tabular-nums;
+        color: #fff;
+        line-height: 1;
+      }
+
+      .fuel-missed {
+        width: 100px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        color: var(--text);
+        padding: 14px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 8px;
+        cursor: pointer;
+        transition: border-color 0.12s, transform 0.08s;
+      }
+
+      .fuel-missed:hover { border-color: var(--border-hover); }
+      .fuel-missed:active { transform: scale(0.98); }
+
+      .fuel-missed-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-soft);
+      }
+
+      .fuel-missed-sub {
+        font-size: 10px;
+        color: var(--text-muted);
+        line-height: 1.3;
+      }
+
+      .fuel-missed-count {
+        font-family: var(--mono);
+        font-size: 22px;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Options grid */
+      .options-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .chip-option {
+        border-radius: 7px;
+        padding: 9px 11px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--text-soft);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        text-align: left;
+        transition: border-color 0.12s, color 0.12s, background 0.12s;
+      }
+
+      .chip-option span {
+        font-family: var(--mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+      }
+
+      .chip-option:hover {
+        border-color: var(--border-hover);
+        color: var(--text);
+      }
+
+      .chip-option.active {
+        border-color: var(--accent);
+        background: var(--accent-dim);
+        color: var(--text);
+      }
+
+      .chip-option.active span { color: var(--accent); }
+
+      /* Textarea */
+      textarea {
+        width: 100%;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 13px;
+        padding: 9px 12px;
+        min-height: 88px;
+        max-height: 180px;
+        resize: vertical;
+        outline: none;
+        transition: border-color 0.12s, box-shadow 0.12s;
+      }
+
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      textarea::placeholder { color: var(--text-muted); }
+
+      .notes-footer {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        margin-top: 6px;
+        letter-spacing: 0.02em;
+      }
+
+      .notes-footer kbd {
+        border-radius: 4px;
+        padding: 1px 5px;
+        border: 1px solid var(--border);
+        font-size: 10px;
+        background: var(--surface2);
+        font-family: var(--mono);
+      }
+
+      /* Error */
+      .error-banner {
+        border-radius: 7px;
+        padding: 8px 12px;
+        background: var(--danger-dim);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        font-size: 12px;
+        font-family: var(--mono);
+        display: none;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: 0.02em;
+      }
+
+      .error-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: var(--danger);
+        flex-shrink: 0;
+      }
+
+      /* Actions */
+      .actions { display: flex; flex-direction: column; gap: 10px; }
+
+      .primary-button {
+        border-radius: 7px;
+        border: none;
+        padding: 11px 20px;
+        font-size: 12px;
+        font-family: var(--mono);
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        background: var(--accent);
+        color: #fff;
+        transition: background 0.12s, transform 0.08s;
+        width: 100%;
+      }
+
+      .primary-button:hover { background: #2563eb; }
+      .primary-button:active { transform: scale(0.99); }
+
+      .primary-button .step-label {
+        font-size: 12px;
+        font-weight: 400;
+        opacity: 0.7;
+      }
+
+      .primary-button-kbd {
+        font-family: var(--mono);
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+
+      .helper {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text-muted);
+        letter-spacing: 0.02em;
+        line-height: 1.5;
+      }
+
+      /* Toast */
+      .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .toast {
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        animation: toastIn 0.25s ease-out forwards;
+        background: rgba(17,17,17,0.95);
+        border: 1px solid rgba(59,130,246,0.3);
+        color: var(--accent);
+      }
+
+      .toast.error {
+        border-color: rgba(239,68,68,0.3);
+        color: #fca5a5;
+      }
+
+      @keyframes toastIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 640px) {
+        .card { padding: 16px; }
+        .options-grid { grid-template-columns: minmax(0,1fr); }
+        .fuel-row { grid-template-columns: 1fr; }
+        .fuel-missed { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; }
+      }
+    </style>
   </head>
-<body>
-<div id="notifications-container" class="notifications-container"></div>
-  <div class="content-container">
-      <div class="content">
-    <div class="left">
-        <div class="header-container">
-          <div><b>Northview Robotics 6632 /</b> <span>Post-Game</span></div>
-          <div class="underline"></div>
-        </div>
-      <div class="card-container-container">
-        Climb level (Shallow means high):
-        <div class="card-container">
-          <div class="card" id="low">Deep</div>
-          <div class="card" id="high">Shallow</div>
-          <div class="card" id="park">Park</div>
-          <div class="card" id="failed">Failed</div>
-        </div>
+  <body>
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <div class="app-shell">
+      <div class="page">
+
+        <!-- Summary card -->
+        <section class="card" aria-labelledby="summary-title">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-title" id="summary-title">Match summary</div>
+              <div class="card-subtitle">Confirm info &amp; auto before logging fuel.</div>
+            </div>
+            <div class="pill"><span class="pill-dot"></span>Step 2 of 2</div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-chip">
+              <div class="summary-label">Match</div>
+              <div id="summaryMatchNumber" class="summary-value">—</div>
+            </div>
+            <div class="summary-chip">
+              <div class="summary-label">Type</div>
+              <div id="summaryMatchType" class="summary-value">—</div>
+            </div>
+            <div class="summary-chip">
+              <div class="summary-label">Team</div>
+              <div id="summaryTeamNumber" class="summary-value">—</div>
+            </div>
+            <div class="summary-chip">
+              <div class="summary-label">Scout</div>
+              <div id="summaryScoutProfile" class="summary-value">—</div>
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-chip">
+              <div class="summary-label">Auto fuel</div>
+              <div id="summaryAutoFuel" class="summary-value">0</div>
+            </div>
+            <div class="summary-chip">
+              <div class="summary-label">Auto climb</div>
+              <div id="summaryAutoClimb" class="summary-value">—</div>
+            </div>
+            <div class="summary-chip">
+              <div class="summary-label">Auto notes</div>
+              <div id="summaryAutoNotes" class="summary-notes">—</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Fuel & notes card -->
+        <section class="card" aria-labelledby="fuel-notes-title">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-title" id="fuel-notes-title">Fuel &amp; notes</div>
+              <div class="card-subtitle">Tap fuel during the match, then capture how they scored.</div>
+            </div>
+          </div>
+
+          <div id="errorBanner" class="error-banner" role="alert">
+            <span class="error-dot"></span>
+            <span id="errorText">Please fill in all required pieces.</span>
+          </div>
+
+          <div class="section-label">Fuel</div>
+          <div class="fuel-row">
+            <button type="button" class="fuel-button" id="fuelButton" aria-label="Increase fuel scored">
+              <div class="fuel-button-label">Fuel scored</div>
+              <div class="fuel-button-sub">Tap during teleop</div>
+              <div id="fuelValue" class="fuel-count">0</div>
+            </button>
+            <button type="button" class="fuel-missed" id="fuelMissedButton" aria-label="Increase missed fuel">
+              <div>
+                <div class="fuel-missed-label">Missed</div>
+                <div class="fuel-missed-sub">Shots that did not score</div>
+              </div>
+              <div id="fuelMissedValue" class="fuel-missed-count">0</div>
+            </button>
+          </div>
+
+          <div class="section-label">How they score</div>
+          <div class="options-grid">
+            <button type="button" class="chip-option" data-intake="floor" id="intake-floor">
+              <span>Floor</span>picks up from floor
+            </button>
+            <button type="button" class="chip-option" data-intake="source" id="intake-source">
+              <span>Source</span>mainly from loading/source
+            </button>
+            <button type="button" class="chip-option" data-intake="both" id="intake-both">
+              <span>Both</span>floor and source
+            </button>
+            <button type="button" class="chip-option" data-intake="other" id="intake-other">
+              <span>Other</span>unusual — clarify in notes
+            </button>
+          </div>
+
+          <div class="section-label">Tower level</div>
+          <div class="options-grid">
+            <button type="button" class="chip-option" data-tower="low" id="tower-low">
+              <span>Low</span>1st level
+            </button>
+            <button type="button" class="chip-option" data-tower="mid" id="tower-mid">
+              <span>Mid</span>2nd level
+            </button>
+            <button type="button" class="chip-option" data-tower="high" id="tower-high">
+              <span>High</span>3rd level
+            </button>
+            <button type="button" class="chip-option" data-tower="none" id="tower-none">
+              <span>None</span>
+            </button>
+          </div>
+
+          <div class="section-label">Notes</div>
+          <div>
+            <textarea id="notes" placeholder="eg. Fast cycler from floor, inconsistent at high; defense impact, breakdowns, penalties..."></textarea>
+            <div class="notes-footer">
+              <span>Focus on what makes this robot stand out.</span>
+              <!-- <span><kbd>Enter</kbd> to save</span> -->
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="saveButton" class="primary-button" type="button">
+              Save log &amp; go to dashboard
+              <!-- <span class="primary-button-kbd">Enter ↵</span> -->
+            </button>
+            <div class="helper">Logs are stored in this browser only. Clearing site data clears old seasons.</div>
+          </div>
+        </section>
+
       </div>
-      <div class="card-container-container">
-        Penalty:
-        <div class="card-container">
-          <div class="card" id="penalty-no">No</div>
-          <div class="card" id="penalty-yes">Yes</div>
-        </div>
-      </div>
-      <div class="card-container-container">
-        Coopertition:
-        <div class="card-container">
-          <div class="card" id="no-coop">No</div>
-          <div class="card" id="yes-coop">Yes</div>
-        </div>
-      </div>
-        <div class="input-container col">
-          <label>Match Number:</label>
-          <input id="matchNumber" type="text">
-        </div>
-        <div class="input-container col">
-          <label>Team Name:</label>
-          <input id="teamName" type="number">
-        </div>
-        <div class="input-container col">
-          <label>Additional comments (Notable events, how the robot performed in auto, any breakages, etc.)</label>
-          <input id="comments" type="text">
-        </div>
     </div>
-<div class="right">
-  <div id="num_missed_goals" class="counter-container">
-    <label>Missed Goals</label>
-          <div class="counter-change-container">
-    <button data-key="num_missed_goals" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_missed_goals" data-action="increment">+</button>
-          </div>
-  </div>
 
-  <div id="num_human_goals" class="counter-container">
-    <label>Human Goals</label>
-          <div class="counter-change-container">
-    <button data-key="num_human_goals" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_human_goals" data-action="increment">+</button>
-          </div>
-  </div>
+    <script>
+      const values = {
+        matchNumber: "", matchType: "", teamNumber: "", scoutProfile: "",
+        autoFuel: 0, autoClimb: "", autoNotes: "",
+        fuel: 0, fuelMissed: 0, intakeType: "", towerLevel: "", notes: "",
+      };
 
-  <div id="num_net_goals" class="counter-container">
-    <label>Net Goals</label>
-          <div class="counter-change-container">
-    <button data-key="num_net_goals" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_net_goals" data-action="increment">+</button>
-          </div>
-  </div>
+      function showToast(message, type = "success") {
+        const container = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = "toast" + (type === "error" ? " error" : "");
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3200);
+      }
 
-  <div id="num_processor_goals" class="counter-container">
-    <label>Processor Goals</label>
-          <div class="counter-change-container">
-    <button data-key="num_processor_goals" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_processor_goals" data-action="increment">+</button>
-          </div>
-  </div>
+      function showError(msg) {
+        document.getElementById("errorText").textContent = msg;
+        document.getElementById("errorBanner").style.display = "flex";
+      }
 
-  <div id="num_l1" class="counter-container">
-    <label>Level 1</label>
-          <div class="counter-change-container">
-    <button data-key="num_l1" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_l1" data-action="increment">+</button>
-          </div>
-  </div>
+      function clearError() {
+        document.getElementById("errorBanner").style.display = "none";
+      }
 
-  <div id="num_l2" class="counter-container">
-    <label>Level 2</label>
-          <div class="counter-change-container">
-    <button data-key="num_l2" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_l2" data-action="increment">+</button>
-          </div>
-  </div>
+      function hydrateFromParams() {
+        const params = new URLSearchParams(window.location.search);
+        const dataParam = params.get("data");
+        if (dataParam) {
+          try {
+            const parsed = JSON.parse(decodeURIComponent(dataParam));
+            Object.keys(parsed).forEach(key => { if (key in values) values[key] = parsed[key]; });
+          } catch (e) {
+            showToast("Could not read incoming data.", "error");
+          }
+        }
+        params.forEach((value, key) => {
+          if (key === "data") return;
+          if (key in values) values[key] = ["autoFuel","fuel","fuelMissed"].includes(key) ? Number(value) || 0 : value;
+        });
+        updateSummaryUI();
+        updateFuelUI();
+        updateChipsUI();
+        const notesEl = document.getElementById("notes");
+        if (notesEl) notesEl.value = values.notes;
+      }
 
-  <div id="num_l3" class="counter-container">
-    <label>Level 3</label>
-          <div class="counter-change-container">
-    <button data-key="num_l3" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_l3" data-action="increment">+</button>
-          </div>
-  </div>
+      const matchTypeLabels = { pm: "Practice", qm: "Qualification", sf: "Playoff", f: "Final" };
 
-  <div id="num_l4" class="counter-container">
-    <label>Level 4</label>
-        <div class="counter-change-container">
-    <button data-key="num_l4" data-action="decrement">-</button>
-    <span class="counter-value">0</span>
-    <button data-key="num_l4" data-action="increment">+</button>
-        </div>
-  </div>
+      function updateSummaryUI() {
+        const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+        set("summaryMatchNumber", values.matchNumber || "—");
+        set("summaryMatchType", matchTypeLabels[values.matchType] || values.matchType || "—");
+        set("summaryTeamNumber", values.teamNumber || "—");
+        set("summaryScoutProfile", values.scoutProfile || "—");
+        set("summaryAutoFuel", String(values.autoFuel ?? 0));
+        set("summaryAutoClimb", values.autoClimb === "yes" ? "Yes" : values.autoClimb === "no" ? "No" : "—");
+        set("summaryAutoNotes", (values.autoNotes || "").trim() || "—");
+      }
 
-</div>
-  </div>
-      
-  <button id="submitButton" class="submit-button" type="button">Finish →</button>
-    </div>
-<script>
-function showErrorNotification(message) {
-  const notificationContainer = document.getElementById('notifications-container');
-  const notification = document.createElement('div');
-  notification.classList.add('notification', 'error');
-  notification.innerText = message;
-  notificationContainer.appendChild(notification);
+      function updateFuelUI() {
+        document.getElementById("fuelValue").textContent = String(values.fuel);
+        document.getElementById("fuelMissedValue").textContent = String(values.fuelMissed);
+      }
 
-  // Fade out the notification after 4 seconds
-  setTimeout(() => {
-    notification.style.opacity = 0;
-    setTimeout(() => notification.remove(), 1000);
-  }, 4000);
-}
-document.getElementById("penalty-no").addEventListener("click", () => setPenalty("no"));
-document.getElementById("penalty-yes").addEventListener("click", () => setPenalty("yes"));
+      function updateChipsUI() {
+        document.querySelectorAll("[data-intake]").forEach(btn =>
+          btn.classList.toggle("active", btn.getAttribute("data-intake") === values.intakeType));
+        document.querySelectorAll("[data-tower]").forEach(btn =>
+          btn.classList.toggle("active", btn.getAttribute("data-tower") === values.towerLevel));
+      }
 
-document.getElementById("no-coop").addEventListener("click", () => setCoop("no"));
-document.getElementById("yes-coop").addEventListener("click", () => setCoop("yes"));
+      function bindInteractions() {
+        document.getElementById("fuelButton").addEventListener("click", () => { values.fuel++; updateFuelUI(); });
+        document.getElementById("fuelMissedButton").addEventListener("click", () => { values.fuelMissed++; updateFuelUI(); });
 
-document.getElementById("high").addEventListener("click", () => setClimbLevel("high"));
-document.getElementById("low").addEventListener("click", () => setClimbLevel("low"));
-document.getElementById("park").addEventListener("click", () => setClimbLevel("park"));
-document.getElementById("failed").addEventListener("click", () => setClimbLevel("failed"));
+        document.querySelectorAll("[data-intake]").forEach(btn =>
+          btn.addEventListener("click", () => { values.intakeType = btn.getAttribute("data-intake"); updateChipsUI(); }));
+        document.querySelectorAll("[data-tower]").forEach(btn =>
+          btn.addEventListener("click", () => { values.towerLevel = btn.getAttribute("data-tower"); updateChipsUI(); }));
 
-let values = {
-  teamNumber: 0,
-  matchNumber: "",
-  teamPosition: "",
-  teamColor: "",
-  num_human_goals: 0,
-  num_processor_goals: 0,
-  num_missed_goals: 0,
-  num_net_goals: 0,
-  num_l1: 0,
-  num_l2: 0,
-  num_l3: 0,
-  num_l4: 0,
-  climbLevel: "",
-  penalty: "",
-  coopertition: "",
-  comments: "",
-  autoComments: ""
-};
+        document.getElementById("notes").addEventListener("input", e => { values.notes = e.target.value; });
+        document.getElementById("saveButton").addEventListener("click", handleSave);
 
+        window.addEventListener("keydown", e => {
+          const active = document.activeElement;
+          if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+          // if (e.key === "Enter") { e.preventDefault(); handleSave(); }
+        });
+      }
 
-// Extract parameters from the URL
-const params = new URLSearchParams(window.location.search);
-console.log("Loaded params:", params.toString());
+      function handleSave() {
+        clearError();
+        if (!values.matchNumber || !values.teamNumber || !values.scoutProfile) {
+          showError("Match, team, and scout are required from step 1.");
+          showToast("Missing match/team/scout from step 1.", "error");
+          return;
+        }
+        const params = new URLSearchParams();
+        Object.keys(values).forEach(key => { const v = values[key]; if (v !== "" && v !== null && v !== undefined) params.set(key, v); });
+        showToast("Saved — going to dashboard…");
+        setTimeout(() => { window.location.href = `dashboard.html?${params.toString()}`; }, 260);
+      }
 
-const dataParam = params.get('data');
-if (dataParam) {
-  try {
-    const parsedData = JSON.parse(decodeURIComponent(dataParam));
-    console.log("Parsed data:", parsedData);
-
-    Object.keys(parsedData).forEach((key) => {
-      values[key] = parsedData[key];
-    });
-  } catch (e) {
-    console.error("Error parsing 'data' parameter:", e);
-  }
-}
-
-// Merge all URL parameters into `values`
-params.forEach((value, key) => {
-  if (key !== 'data' && value.trim() !== "") {
-    values[key] = isNaN(value) ? value : parseFloat(value);
-  }
-  document.getElementById('matchNumber').value = values.matchNumber;
-  document.getElementById('teamName').value = values.teamNumber;
-});
-
-// Update UI
-const updateUI = () => {
-  console.log("Updating UI...");
-  
-  // Update numeric counters
-  const counters = [
-    "num_missed_goals",
-    "num_human_goals",
-    "num_net_goals",
-    "num_processor_goals",
-    "num_l1",
-    "num_l2",
-    "num_l3",
-    "num_l4"
-  ];
-
-  counters.forEach((key) => {
-    const counterSpan = document.querySelector(`#${key} .counter-value`);
-    if (counterSpan) {
-      counterSpan.textContent = values[key];
-    } else {
-      console.warn(`Counter element for ${key} not found.`);
-    }
-  });
-
-  // Set active states for buttons
-  setPenalty(values.penalty);
-  setCoop(values.coopertition);
-  setClimbLevel(values.climbLevel);
-};
-
-function setCoop(coop) {
-  values.coopertition = coop;
-  document.getElementById("no-coop").classList.toggle("active", coop === "no");
-  document.getElementById("yes-coop").classList.toggle("active", coop === "yes");
-}
-
-function setClimbLevel(climbLevel) {
-  values.climbLevel = climbLevel;
-  document.getElementById("high").classList.remove("active");
-  document.getElementById("low").classList.remove("active");
-  document.getElementById("failed").classList.remove("active");
-  document.getElementById("park").classList.remove("active");
-
-  // Set the active class based on the selected position
-  switch (climbLevel) {
-    case "high":
-      document.getElementById("high").classList.add("active");
-      break;
-    case "low":
-      document.getElementById("low").classList.add("active");
-      break;
-    case "failed":
-      document.getElementById("failed").classList.add("active");
-      break;
-    case "park":
-      document.getElementById("park").classList.add("active");
-      break;
-  }
-}
-
-function setPenalty(penalty) {
-  values.penalty = penalty;
-  document.getElementById("penalty-no").classList.toggle("active", penalty === "no");
-  document.getElementById("penalty-yes").classList.toggle("active", penalty === "yes");
-}
-
-// Handle counter buttons
-document.body.addEventListener("click", (event) => {
-  const button = event.target;
-  const key = button.getAttribute("data-key");
-  const action = button.getAttribute("data-action");
-
-  if (key && action) {
-    if (action === "increment") values[key]++;
-    if (action === "decrement") values[key]--;
-    updateUI();
-  }
-});
-
-// Handle form submission
-document.getElementById("submitButton")?.addEventListener("click", () => {
-  console.log("Submitting data...");
-  values.matchNumber = document.getElementById('matchNumber').value;
-  values.teamNumber= document.getElementById('teamName').value;
-  values.comments= document.getElementById('comments').value;
-
-
- if (!values.climbLevel || !values.penalty || !values.coopertition) {
-    showErrorNotification('Please fill in all required fields (Climb Level, Penalty, and Coopertition).');
-  } else {
-
-  showNotification("Data submitted successfully!", "success");
-  const newParams = new URLSearchParams();
-
-  Object.keys(values).forEach((key) => {
-    if (values[key] !== "") {
-      newParams.set(key, values[key]);
-    }
-  });
-
-  // Navigate to the new URL
-  window.location.href = `dashboard.html?${newParams.toString()}`;
-  }
-  console.log(matchNumber)
-  // Construct new URL parameters
-});
-
-// Initialize UI with updated values
-updateUI();
-function showNotification(message, type = 'success') {
-  const notificationContainer = document.getElementById('notifications-container');
-
-  const notification = document.createElement('div');
-  notification.classList.add('notification');
-  if (type === 'error') {
-    notification.classList.add('error');
-  }
-
-  notification.textContent = message;
-
-  // Add the notification to the container
-  notificationContainer.appendChild(notification);
-
-  // Remove the notification after animation ends
-  setTimeout(() => {
-    notification.remove();
-  }, 4000); // Matches the duration of the animation
-}
-
-
-document.getElementById("penalty-no").addEventListener("click", () => {
-  showNotification("Penalty set to No", "success");
-});
-
-document.getElementById("penalty-yes").addEventListener("click", () => {
-  showNotification("Penalty set to yes", "success");
-});
-document.getElementById("no-coop").addEventListener("click", () => {
-  showNotification("Coopertition set to no", "success");
-});
-document.getElementById("yes-coop").addEventListener("click", () => {
-  showNotification("Coopertition set to yes", "success");
-});
-document.getElementById("low").addEventListener("click", () => {
-  showNotification("Climb level set to deep", "success");
-});
-document.getElementById("high").addEventListener("click", () => {
-  showNotification("Climb level set to shallow", "success");
-});
-document.getElementById("failed").addEventListener("click", () => {
-  showNotification("Climb level set to failed", "success");
-});
-document.getElementById("park").addEventListener("click", () => {
-  showNotification("Climb level set to park", "success");
-});
-</script>
-</body>
+      hydrateFromParams();
+      bindInteractions();
+    </script>
+  </body>
 </html>

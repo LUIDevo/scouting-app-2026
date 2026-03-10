@@ -1,303 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team 6632 Scouting App</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team 6632 Scouting App – Info & Auto</title>
     <style>
-[role="button"] {
-  all: unset;   padding: 0;
-  background: none;
-  border: none;
-  text-align: inherit;
-  cursor: inherit;
-}
-@font-face {
-  font-family: "Jetbrains";
-  src: url(./fonts/JETBRAINSMONONL-MEDIUM.TTF);
-}
-@font-face {
-  font-family: "Jetbrains Bold";
-  src: url(./fonts/JETBRAINSMONONL-BOLD.TTF);
-}
-header {
-  margin-bottom: 4px;
-}
-.underline {
-  height: 2px;
-  width: 100%;
-  background-color: white;
-  margin-bottom: 24px;
-  margin-top: 2px;
-}
-input {
-  font-family: Jetbrains;
-  border: 1px solid #818181;
-  border-radius: 4px;
-  padding: 12px 24px;
-}
-label, p {
-  color: white;
-}
-/* Preset Styles */
-.flex {
-  display: flex;
-}
-.col {
-  flex-direction: column;
-}
-.subheader {
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  font-size: 20px;
-}
-.color-container {
-  display: flex;
-}
-/* Normal Styling */
-.content {
-  position: absolute;
-  color: #fff;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  justify-content: center;
-  background-color: #1D2021;
-  align-items: center;
-  font-family: Jetbrains;
-}
-.header {
-  width: 100%;
-  font-size: 44px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #FBF1C7;
-  font-family: Jetbrains Bold;
-}
-.main-content {
-  width: 600px;
-  height: 100%;
-  padding-top: 32px;
-}
-.sub-container {
-  gap: 8px;
-}
-.input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.color-question-container {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.color-container {
-  gap: 8px;
-}
-.position-container {
-  margin-top: 2px;
-  margin-bottom: 16px;
-  display: flex;
-  gap: 8px;
-}
-.box {
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-  background-color: #ffff;
-  color: black;
-  width:50%;
-  border-radius: 4px;
-  transition: all 0.3s ease-in-out;
-}
-#red {
-  background-color: #F9E7EA;
-  color:#3E2525;
-}
-#red:hover, #red.active {
-  background-color: #d20f39;
-  color:#F9E7EA;
-}
-#blue{
-  background-color: #C3D8EB;
-  color: #25253E;
-}
-#blue:hover, #blue.active{
-  background-color: #1e66f5;
-  color: #C3D8EB;
-}
-#processor, #middle, #opposite {
-  border: 1px solid #818181;
-}
-#processor.active, #middle.active, #opposite.active {
-  border: 1px solid #0D4FAF;
-  background-color: #97B0ED;
-}
-.submit-button {
-  border-radius: 4px;
-  background-color: black;
-  color: white;
-  padding: 12px 0px;
-  margin-bottom: 32px;
-}
-button {
-  cursor: pointer;
-  font-family: Jetbrains;
-}
-body, html {
-  width: 100vw;
-  background-color: #1D2021;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-</style>
+      :root {
+        --bg:            #111111;
+        --surface:       #111111;
+        --surface2:      #1a1a1a;
+        --border:        rgba(255, 255, 255, 0.08);
+        --border-hover:  rgba(255, 255, 255, 0.16);
+        --text:          #ededed;
+        --text-soft:     #888888;
+        --text-muted:    #505050;
+        --accent:        #3b82f6;
+        --accent-dim:    rgba(59, 130, 246, 0.1);
+        --accent-border: rgba(59, 130, 246, 0.35);
+        --danger:        #ef4444;
+        --danger-dim:    rgba(239, 68, 68, 0.1);
+        --mono: 'IBM Plex Mono', monospace;
+        --sans: 'IBM Plex Sans', sans-serif;
+      }
+			@font-face {
+				font-family: "IBM Plex Mono";
+				src: url(./fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf);
+			}
+			@font-face {
+				font-family: "IBM Plex Sans";
+				src: url(./fonts/IBM_Plex_Sans/static/IBMPlexSans-Regular.ttf);
+			}
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body, html {
+        width: 100%;
+        height: 100%;
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .app-shell {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+      }
+
+      .card {
+        margin-top: -20%;
+        width: 100%;
+        max-width: 720px;
+        background: var(--surface);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 28px 26px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      header { display: flex; flex-direction: column; gap: 5px; }
+
+      .header-top {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--accent);
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .header-top .sep { color: var(--text-muted); }
+
+      .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 5px;
+      }
+
+      .page-title {
+        font-size: 22px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+
+      .pill {
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 10px;
+        background: var(--accent-dim);
+        border: 1px solid var(--accent-border);
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        letter-spacing: 0.04em;
+        flex-shrink: 0;
+      }
+      .pill-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: var(--accent);
+      }
+
+      .divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+      .subheader { font-size: 13px; color: var(--text-soft); line-height: 1.55; }
+
+      form { display: flex; flex-direction: column; gap: 22px; }
+
+      .section-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: -10px;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .field { display: flex; flex-direction: column; gap: 5px; }
+
+      label { font-size: 12px; font-weight: 500; color: var(--text-soft); line-height: 1.4; }
+
+      .label-sub { font-size: 11px; font-weight: 400; color: var(--text-muted); }
+
+      input, textarea {
+        font-family: var(--sans);
+        font-size: 13px;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+        padding: 9px 12px;
+        background: var(--surface2);
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.12s, box-shadow 0.12s;
+        width: 100%;
+      }
+
+      input:focus, textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+      textarea { resize: vertical; min-height: 76px; max-height: 140px; }
+
+      /* Scout field with dropdown trigger */
+      .scout-field-wrap { position: relative; }
+
+      .scout-field-wrap input { padding-right: 36px; }
+
+      .scout-dropdown-btn {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        transition: color 0.12s;
+        border-radius: 4px;
+      }
+      .scout-dropdown-btn:hover { color: var(--text); }
+      .scout-dropdown-btn svg { display: block; }
+
+      .scout-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: #1a1a1a;
+        border: 1px solid var(--border-hover);
+        border-radius: 7px;
+        overflow: hidden;
+        z-index: 100;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      }
+      .scout-dropdown.open { display: block; }
+
+      .scout-option {
+        padding: 9px 12px;
+        font-size: 13px;
+        color: var(--text-soft);
+        cursor: pointer;
+        transition: background 0.1s, color 0.1s;
+        font-family: var(--sans);
+        border-bottom: 1px solid var(--border);
+      }
+      .scout-option:last-child { border-bottom: none; }
+      .scout-option:hover { background: rgba(59,130,246,0.08); color: var(--text); }
+
+      .scout-dropdown-empty {
+        padding: 9px 12px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: var(--mono);
+        letter-spacing: 0.02em;
+      }
+
+      /* Counter */
+      .counter-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: 7px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        height: 38px;
+      }
+
+      .counter-label-main { font-size: 13px; color: var(--text-soft); }
+
+      .counter-controls { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+      .counter-button {
+        width: 22px;
+        height: 22px;
+        border-radius: 5px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-soft);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        cursor: pointer;
+        transition: border-color 0.12s, color 0.12s;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .counter-button:hover { border-color: var(--border-hover); color: var(--text); }
+
+      .counter-value {
+        min-width: 18px;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .segment-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        overflow: hidden;
+        height: 38px;
+      }
+
+      .segment-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--sans);
+        font-size: 13px;
+        color: var(--text-soft);
+        background: transparent;
+        border: none;
+        border-right: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s;
+      }
+      .segment-btn:last-child { border-right: none; }
+      .segment-btn:hover { background: rgba(255, 255, 255, 0.04); color: var(--text); }
+      .segment-btn.active { background: var(--accent-dim); color: var(--accent); font-weight: 500; }
+
+      .error-banner {
+        border-radius: 7px;
+        padding: 8px 12px;
+        background: var(--danger-dim);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        font-size: 12px;
+        font-family: var(--mono);
+        display: none;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: 0.02em;
+      }
+      .error-dot { width: 5px; height: 5px; border-radius: 999px; background: var(--danger); flex-shrink: 0; }
+
+      .actions-row { display: flex; flex-direction: column; gap: 10px; }
+
+      .primary-button {
+        border-radius: 7px;
+        border: none;
+        padding: 11px 20px;
+        font-size: 13px;
+        font-family: var(--sans);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        background: var(--accent);
+        color: #fff;
+        transition: background 0.12s, transform 0.08s;
+        width: 100%;
+        letter-spacing: 0.01em;
+      }
+      .primary-button:hover { background: #2563eb; }
+      .primary-button:active { transform: scale(0.99); }
+      .primary-button .step-label { font-size: 12px; font-weight: 400; opacity: 0.7; }
+      .primary-button-kbd {
+        font-family: var(--mono);
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .helper-text {
+        font-size: 11px;
+        font-family: var(--mono);
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        letter-spacing: 0.02em;
+      }
+      .helper-hotkeys kbd {
+        border-radius: 4px;
+        padding: 1px 5px;
+        border: 1px solid var(--border);
+        font-size: 10px;
+        background: var(--surface2);
+        font-family: var(--mono);
+      }
+
+      @media (max-width: 640px) {
+        .card { padding: 20px 16px 18px; }
+        .field-grid { grid-template-columns: minmax(0, 1fr); }
+      }
+    </style>
   </head>
   <body>
-    <div class="content flex col">
-      <div class="main-content flex col">
+    <div class="app-shell">
+      <main class="card" aria-labelledby="page-title">
         <header>
-          <b>Northview Robotics 6632 /</b> Information
+          <div class="header-top">
+            Northview Robotics 6632
+            <span class="sep">/</span>
+            2026 Scouting
+          </div>
+          <div class="title-row">
+            <h1 id="page-title" class="page-title">Info &amp; Auto</h1>
+            <div class="pill">
+              <span class="pill-dot"></span>
+              Step 1 of 2 · pre-match
+            </div>
+          </div>
+          <div class="divider"></div>
+          <p class="subheader">Log who you are scouting and how the robot performs in auto before the match starts.</p>
         </header>
-        <div class="subheader"> Collecting general information</div>
-        <div class="underline"></div>
-        <form id="scoutForm" class="flex col sub-container">
-          <div class="input-container col">
-            <label>What is your name?</label>
-            <input id="scoutId" placeholder="eg. John Doe" type="text">
-          </div>
-          <div class="input-container col">
-            <label>What is the match number?</label>
-            <input id="matchNumber" placeholder="eg. 12" type="text">
-          </div>
-          <div class="input-container col">
-            <label>What is the team you are scouting (number)?</label>
-            <input id="teamNumber" placeholder="eg. 6632" type="text">
-          </div>
-          <div class="color-question-container">
-            <label for="color-selection">Is the robot on red or blue?</label>
-            <div class="color-container" role="group" aria-labelledby="color-selection">
-              <button class="box" type="button" id="red" role="button" aria-pressed="false">Red</button>
-              <button class="box" type="button" id="blue" role="button" aria-pressed="false">Blue</button>
+
+        <form id="scoutForm" novalidate>
+
+          <div class="section-label">Match info</div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="scoutProfile">Scout name <div class="label-sub">Who is filling out this log?</div></label>
+              <div class="scout-field-wrap">
+                <input id="scoutProfile" name="scoutProfile" type="text" autocomplete="off" placeholder="eg. Jane D." required />
+                <button type="button" class="scout-dropdown-btn" id="scoutDropdownBtn" aria-label="Pick a saved scout" title="Saved scouts">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" >
+                    <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="scout-dropdown" id="scoutDropdown"></div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="matchNumber">Match number <div class="label-sub">As shown on the field display</div></label>
+              <input id="matchNumber" name="matchNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="eg. 12" required />
+            </div>
+            <div class="field">
+              <label for="teamNumber">Team number <div class="label-sub">Robot you are scouting</div></label>
+              <input id="teamNumber" name="teamNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="eg. 6632" required />
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label>Match type <div class="label-sub">As shown on The Blue Alliance (comp_level)</div></label>
+              <div class="segment-group" style="grid-template-columns: repeat(4, 1fr);" role="radiogroup" aria-label="Match type">
+                <button type="button" class="segment-btn" id="matchType-pm">Practice</button>
+                <button type="button" class="segment-btn" id="matchType-qm">Qualification</button>
+                <button type="button" class="segment-btn" id="matchType-sf">Playoff</button>
+                <button type="button" class="segment-btn" id="matchType-f">Final</button>
+              </div>
             </div>
           </div>
 
-          <div class="color-question-container">
-            <label for="position-selection">Which side is the robot closest to?</label>
-            <div class="position-container" role="group" aria-labelledby="position-selection">
-              <button type="button" class="box" id="processor" role="button" aria-pressed="false">Processor</button>
-              <button type="button" class="box" id="middle" role="button" aria-pressed="false">Middle</button>
-              <button type="button" class="box" id="opposite" role="button" aria-pressed="false">Opposite</button>
+          <div class="section-label">Auto</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Auto fuel scored <div class="label-sub">Estimate total in autonomous</div></label>
+              <div class="counter-group">
+                <span class="counter-label-main" id="autoFuelDisplay">0 scored</span>
+                <div class="counter-controls">
+                  <button type="button" class="counter-button" id="autoFuelDecrement" aria-label="Decrease">–</button>
+                  <span id="autoFuelValue" class="counter-value">0</span>
+                  <button type="button" class="counter-button" id="autoFuelIncrement" aria-label="Increase">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Auto climb <div class="label-sub">Did the robot climb in auto?</div></label>
+              <div class="segment-group" role="radiogroup" aria-label="Auto climb">
+                <button type="button" class="segment-btn" id="autoClimb-yes">Yes</button>
+                <button type="button" class="segment-btn" id="autoClimb-no">No</button>
+              </div>
             </div>
           </div>
-          <button id="submitButton" class="submit-button " type="submit">Continue →</button>
+
+          <div class="field">
+            <label for="autoNotes">Auto notes <div class="label-sub">Path, scoring pattern, consistency, fouls, start position, etc.</div></label>
+            <textarea id="autoNotes" name="autoNotes" placeholder="eg. 3 fuel in center, reliable; bumped alliance during path 2..."></textarea>
+          </div>
+
+          <div id="errorBanner" class="error-banner" role="alert">
+            <span class="error-dot"></span>
+            <span id="errorText">Please fill in all required fields.</span>
+          </div>
+
+          <div class="actions-row">
+            <button id="submitButton" class="primary-button" type="submit">
+              Go to fuel &amp; notes
+              <span class="step-label">Overview · Step 2</span>
+              <span class="primary-button-kbd">Enter ↵</span>
+            </button>
+            <div class="helper-text">
+              <span>All info stays in this browser only.</span>
+              <span class="helper-hotkeys"><span><kbd>Tab</kbd> to move · <kbd>Enter</kbd> to continue</span></span>
+            </div>
+          </div>
+
         </form>
-      </div>
+      </main>
     </div>
 
-<script>
-let teamColor = "";
-let teamPosition = "";
-
-function setTeam(color) {
-  teamColor = color;
-  document.getElementById("red").classList.toggle("active", color === "red");
-  document.getElementById("blue").classList.toggle("active", color === "blue");
-}
-
-document.getElementById("processor").addEventListener("click", () => setPosition("processor"));
-document.getElementById("middle").addEventListener("click", () => setPosition("middle"));
-document.getElementById("opposite").addEventListener("click", () => setPosition("opposite"));
-
-function setPosition(position) {
-  teamPosition = position;
-  // Clear existing active classes for positions
-  document.getElementById("processor").classList.remove("active");
-  document.getElementById("middle").classList.remove("active");
-  document.getElementById("opposite").classList.remove("active");
-
-  // Set the active class based on the selected position
-  switch (position) {
-    case "processor":
-      document.getElementById("processor").classList.add("active");
-      break;
-    case "middle":
-      document.getElementById("middle").classList.add("active");
-      break;
-    case "opposite":
-      document.getElementById("opposite").classList.add("active");
-      break;
-    default:
-      console.error("Unknown position:", position);
-  }
-}
-
-document.getElementById("red").addEventListener("click", () => setTeam("red"));
-document.getElementById("blue").addEventListener("click", () => setTeam("blue"));
-
-document.getElementById("scoutForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  const scoutId = document.getElementById("scoutId").value.trim();
-  const teamNumber = document.getElementById("teamNumber").value.trim();
-  const matchNumber = document.getElementById("matchNumber").value.trim();
-
-  if (!scoutId) {
-    console.error("Scout ID is missing");
-    return;
-  }
-  if (!matchNumber) {
-    console.error("Match Number is missing");
-    return;
-  }
-  if (!teamPosition) {
-    console.error("Team Position is missing");
-    return;
-  }
-  if (teamNumber == "") {
-    console.error("Team Number is missing");
-    return;
-  }
-  if (!teamColor) {
-    console.error("Team Color is missing");
-    return;
-  }
-
-  console.log("All verified");
-  console.log("Scout ID:", scoutId);
-  console.log("Team Number:", teamNumber);
-  console.log("Match Number:", matchNumber);
-  console.log("Team Position:", teamPosition);
-  console.log("Team Color:", teamColor);
+    <script>
+      // ── Scout dropdown ────────────────────────────────────────
+      const scoutInput   = document.getElementById("scoutProfile");
+			let scouts=[]
+      const dropdownBtn  = document.getElementById("scoutDropdownBtn");
+      const dropdown     = document.getElementById("scoutDropdown");
 
 
-  // Add the current game data to the gamesData object
-let gamesData = {
-  matchNumber: matchNumber,
-  scoutId: scoutId,
-  teamNumber: teamNumber,
-  teamPosition: teamPosition,
-  teamColor: teamColor
-};
+      function openDropdown() {
+        dropdown.innerHTML = "";
+        if (scouts.length === 0) {
+          dropdown.innerHTML = `<div class="scout-dropdown-empty">No saved profiles yet.</div>`;
+        } else {
+          scouts.forEach(name => {
+            const opt = document.createElement("div");
+            opt.className = "scout-option";
+            opt.textContent = name;
+            opt.addEventListener("mousedown", (e) => {
+              e.preventDefault(); // don't blur the input
+              scoutInput.value = name;
+              closeDropdown();
+              scoutInput.focus();
+            });
+            dropdown.appendChild(opt);
+          });
+        }
+        dropdown.classList.add("open");
+      }
 
+      function closeDropdown() { dropdown.classList.remove("open"); }
 
-  try {
-    let encodedData = encodeURIComponent(JSON.stringify(gamesData));
-    console.log("Encoded Data:", encodedData);
-    setTimeout(() => {
-      window.location.href = `match.html?data=${encodedData}`;
-    }, 0);
-  } catch (error) {
-    console.error("Error encoding data:", error);
-  }
-});
-</script>
+      dropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.contains("open") ? closeDropdown() : openDropdown();
+      });
+
+      // Close on outside click
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".scout-field-wrap")) closeDropdown();
+      });
+
+      // Autofill last used scout on load
+      window.addEventListener("DOMContentLoaded", () => {
+        if (scouts.length > 0) {
+          scoutInput.value = scouts[scouts.length - 1];
+        }
+      });
+
+      // ── Match type ────────────────────────────────────────────
+      let matchType = "";
+      const matchTypeIds = ["matchType-pm", "matchType-qm", "matchType-sf", "matchType-f"];
+      const matchTypeValues = { "matchType-pm": "pm", "matchType-qm": "qm", "matchType-sf": "sf", "matchType-f": "f" };
+
+      function setMatchType(value) {
+        matchType = value;
+        matchTypeIds.forEach(id => {
+          document.getElementById(id).classList.toggle("active", matchTypeValues[id] === value);
+        });
+      }
+
+      matchTypeIds.forEach(id => {
+        document.getElementById(id).addEventListener("click", () => setMatchType(matchTypeValues[id]));
+      });
+
+      // ── Counter ───────────────────────────────────────────────
+      let autoFuel = 0;
+      let autoClimb = "";
+
+      function setAutoFuel(value) {
+        autoFuel = Math.max(0, value);
+        document.getElementById("autoFuelValue").textContent = String(autoFuel);
+        document.getElementById("autoFuelDisplay").textContent = autoFuel + " scored";
+      }
+
+      function setAutoClimb(value) {
+        autoClimb = value;
+        document.getElementById("autoClimb-yes").classList.toggle("active", value === "yes");
+        document.getElementById("autoClimb-no").classList.toggle("active", value === "no");
+      }
+
+      document.getElementById("autoFuelIncrement").addEventListener("click", () => setAutoFuel(autoFuel + 1));
+      document.getElementById("autoFuelDecrement").addEventListener("click", () => setAutoFuel(autoFuel - 1));
+      document.getElementById("autoClimb-yes").addEventListener("click", () => setAutoClimb("yes"));
+      document.getElementById("autoClimb-no").addEventListener("click", () => setAutoClimb("no"));
+
+      function hydrateFromParams() {
+        const params = new URLSearchParams(window.location.search);
+        const dataParam = params.get("data");
+        if (dataParam) {
+          try {
+            let parsed = JSON.parse(decodeURIComponent(dataParam));
+						parsed=parsed.replace(/"/g, '');
+						if (parsed.length >= 2) {
+							parsed=parsed.slice(1, -1);
+						} 
+						console.log(parsed)
+						scouts=parsed.split(",");
+					} catch (e) {
+            showError("Could not read incoming data.", "error");
+          }
+        }
+      }
+      // ── Validation & submit ───────────────────────────────────
+      function showError(msg) {
+        document.getElementById("errorText").textContent = msg;
+        document.getElementById("errorBanner").style.display = "flex";
+      }
+
+      function clearError() {
+        document.getElementById("errorBanner").style.display = "none";
+      }
+
+      document.getElementById("scoutForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        clearError();
+        const scoutProfile = scoutInput.value.trim();
+        const matchNumber  = document.getElementById("matchNumber").value.trim();
+        const teamNumber   = document.getElementById("teamNumber").value.trim();
+        const autoNotes    = document.getElementById("autoNotes").value.trim();
+        if (!scoutProfile || !matchNumber || !teamNumber) { showError("Scout, match, and team are required."); return; }
+        if (!matchType) { showError("Select a match type."); return; }
+        if (!autoClimb) { showError("Select whether the robot climbs in auto."); return; }
+        const gameData = { matchNumber, matchType, teamNumber, scoutProfile, autoFuel, autoClimb, autoNotes };
+        try {
+          window.location.href = `overview.html?data=${encodeURIComponent(JSON.stringify(gameData))}`;
+        } catch (err) {
+          showError("Something went wrong. Try again.");
+        }
+      });
+
+      hydrateFromParams();
+    </script>
   </body>
 </html>

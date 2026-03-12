@@ -162,27 +162,31 @@
         gap: 10px;
       }
 
-      .fuel-button {
-        width: 100%;
+      .fuel-scored-group {
         border-radius: 10px;
         border: 1px solid rgba(59, 130, 246, 0.4);
-        padding: 22px 16px;
         background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 55%, #60a5fa 100%);
+        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.25);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .fuel-button {
+        width: 100%;
+        padding: 28px 16px 40px;
+        background: transparent;
+        border: none;
         color: #fff;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 6px;
         cursor: pointer;
-        transition: filter 0.1s, transform 0.08s, box-shadow 0.1s;
-        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.25);
+        transition: filter 0.1s, transform 0.08s;
       }
 
-      .fuel-button:hover {
-        filter: brightness(1.08);
-        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.35);
-      }
-
+      .fuel-button:hover { filter: brightness(1.08); }
       .fuel-button:active { transform: scale(0.98); filter: brightness(0.96); }
 
       .fuel-button-label {
@@ -203,6 +207,29 @@
         color: #fff;
         line-height: 1;
       }
+
+      .fuel-quick-row {
+        display: flex;
+        gap: 6px;
+        padding: 0 10px 10px;
+      }
+
+      .fuel-quick {
+        flex: 1;
+        border-radius: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 0;
+        cursor: pointer;
+        transition: background 0.1s, transform 0.08s;
+        letter-spacing: 0.02em;
+      }
+
+      .fuel-quick:hover { background: rgba(255, 255, 255, 0.2); }
+      .fuel-quick:active { transform: scale(0.97); background: rgba(255, 255, 255, 0.08); }
 
       .fuel-missed {
         width: 100px;
@@ -511,11 +538,17 @@
 
           <div class="section-label">Fuel</div>
           <div class="fuel-row">
-            <button type="button" class="fuel-button" id="fuelButton" aria-label="Increase fuel scored">
-              <div class="fuel-button-label">Fuel scored</div>
-              <div class="fuel-button-sub">Tap during teleop</div>
-              <div id="fuelValue" class="fuel-count">0</div>
-            </button>
+            <div class="fuel-scored-group">
+              <button type="button" class="fuel-button" id="fuelButton" aria-label="Increase fuel scored by 1">
+                <div class="fuel-button-label">Fuel scored</div>
+                <div class="fuel-button-sub">Tap for +1 during teleop</div>
+                <div id="fuelValue" class="fuel-count">0</div>
+              </button>
+              <div class="fuel-quick-row">
+                <button type="button" class="fuel-quick" id="fuelPlus5Button" aria-label="Increase fuel scored by 5">+5</button>
+                <button type="button" class="fuel-quick" id="fuelPlus10Button" aria-label="Increase fuel scored by 10">+10</button>
+              </div>
+            </div>
             <button type="button" class="fuel-missed" id="fuelMissedButton" aria-label="Increase missed fuel">
               <div>
                 <div class="fuel-missed-label">Missed</div>
@@ -652,6 +685,8 @@
 
       function bindInteractions() {
         document.getElementById("fuelButton").addEventListener("click", () => { values.fuel++; updateFuelUI(); });
+        document.getElementById("fuelPlus5Button").addEventListener("click", () => { values.fuel += 5; updateFuelUI(); });
+        document.getElementById("fuelPlus10Button").addEventListener("click", () => { values.fuel += 10; updateFuelUI(); });
         document.getElementById("fuelMissedButton").addEventListener("click", () => { values.fuelMissed++; updateFuelUI(); });
 
         document.querySelectorAll("[data-intake]").forEach(btn =>

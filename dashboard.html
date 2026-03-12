@@ -363,6 +363,8 @@ function loadGames() {
     card.style.animationDelay = `${i * 0.04}s`;
     const autoSummary = `${game.autoFuel ?? 0} fuel · ${game.autoClimb || "—"}`;
     const teleSummary = `${game.fuel ?? 0} scored · ${game.fuelMissed ?? 0} missed`;
+    const climbSummary = `${game.towerLevel ?? unknown}`;
+		console.log(game)
     const baseNotes = (game.notes || game.autoNotes || "No notes").trim();
     const notesSnippet = baseNotes.length > 120 ? baseNotes.slice(0, 117) + "..." : baseNotes;
     const detailsId = `details_${game.matchType || ""}_${game.matchNumber}`;
@@ -380,6 +382,7 @@ function loadGames() {
             <div class="card-subline">Scout · ${game.scoutProfile || "N/A"}</div>
           </div>
           <div class="card-main-right">
+            <div class="metric metric-greyed"><span class="metric-label">Climb</span><span class="metric-value">${climbSummary}</span></div>
             <div class="metric"><span class="metric-label">Auto</span><span class="metric-value">${autoSummary}</span></div>
             <div class="metric"><span class="metric-label">Teleop</span><span class="metric-value">${teleSummary}</span></div>
           </div>
@@ -618,6 +621,11 @@ window.onload = function () { saveGameToLocalStorage(); loadGames(); };
         font-size: 11px;
         align-items: center;
       }
+			.metric-greyed {
+        background: transparent;
+        color: var(--text-muted) !important;
+        border: 1px solid var(--border);
+			}
 
       .metric-label {
         text-transform: uppercase;

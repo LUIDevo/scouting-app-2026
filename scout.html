@@ -274,7 +274,8 @@
         border: 1px solid var(--border);
         background: var(--surface2);
         overflow: hidden;
-        height: 38px;
+        min-height: 38px;
+        height: 100%;
       }
 
       .segment-btn {
@@ -289,6 +290,7 @@
         border-right: 1px solid var(--border);
         cursor: pointer;
         transition: background 0.12s, color 0.12s;
+				height: 100%;
       }
       .segment-btn:last-child { border-right: none; }
       .segment-btn:hover { background: rgba(255, 255, 255, 0.04); color: var(--text); }
@@ -437,10 +439,12 @@
               </div>
             </div>
             <div class="field">
-              <label>Auto climb <div class="label-sub">Did the robot climb in auto?</div></label>
-              <div class="segment-group" role="radiogroup" aria-label="Auto climb">
-                <button type="button" class="segment-btn" id="autoClimb-yes">Yes</button>
-                <button type="button" class="segment-btn" id="autoClimb-no">No</button>
+              <label>Auto climb <div class="label-sub">Level reached during auto</div></label>
+              <div class="segment-group" style="grid-template-columns: repeat(4, 1fr);" role="radiogroup" aria-label="Auto climb level">
+                <button type="button" class="segment-btn" id="autoClimb-low">Low</button>
+                <button type="button" class="segment-btn" id="autoClimb-mid">Mid</button>
+                <button type="button" class="segment-btn" id="autoClimb-high">High</button>
+                <button type="button" class="segment-btn" id="autoClimb-none">None</button>
               </div>
             </div>
           </div>
@@ -547,14 +551,14 @@
 
       function setAutoClimb(value) {
         autoClimb = value;
-        document.getElementById("autoClimb-yes").classList.toggle("active", value === "yes");
-        document.getElementById("autoClimb-no").classList.toggle("active", value === "no");
+        ["low", "mid", "high", "none"].forEach(level =>
+          document.getElementById("autoClimb-" + level).classList.toggle("active", value === level));
       }
 
       document.getElementById("autoFuelIncrement").addEventListener("click", () => setAutoFuel(autoFuel + 1));
       document.getElementById("autoFuelDecrement").addEventListener("click", () => setAutoFuel(autoFuel - 1));
-      document.getElementById("autoClimb-yes").addEventListener("click", () => setAutoClimb("yes"));
-      document.getElementById("autoClimb-no").addEventListener("click", () => setAutoClimb("no"));
+      ["low", "mid", "high", "none"].forEach(level =>
+        document.getElementById("autoClimb-" + level).addEventListener("click", () => setAutoClimb(level)));
 
       function hydrateFromParams() {
         const params = new URLSearchParams(window.location.search);
@@ -592,7 +596,7 @@
         const autoNotes    = document.getElementById("autoNotes").value.trim();
         if (!scoutProfile || !matchNumber || !teamNumber) { showError("Scout, match, and team are required."); return; }
         if (!matchType) { showError("Select a match type."); return; }
-        if (!autoClimb) { showError("Select whether the robot climbs in auto."); return; }
+        if (!autoClimb) { showError("Select the auto climb level."); return; }
         const gameData = { matchNumber, matchType, teamNumber, scoutProfile, autoFuel, autoClimb, autoNotes };
         try {
           window.location.href = `overview.html?data=${encodeURIComponent(JSON.stringify(gameData))}`;

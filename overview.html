@@ -155,6 +155,28 @@
         line-height: 1.4;
       }
 
+      .fuel-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .undo-btn {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text-muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 2px 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.1s;
+      }
+
+      .undo-btn:hover { color: var(--text-soft); }
+
       /* Fuel buttons */
       .fuel-row {
         display: grid;
@@ -230,6 +252,32 @@
 
       .fuel-quick:hover { background: rgba(255, 255, 255, 0.2); }
       .fuel-quick:active { transform: scale(0.97); background: rgba(255, 255, 255, 0.08); }
+
+      .btn-kbd {
+        font-family: var(--mono);
+        font-size: 9px;
+        padding: 1px 5px;
+        border-radius: 3px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: rgba(255,255,255,0.7);
+        letter-spacing: 0.05em;
+        line-height: 1.4;
+        pointer-events: none;
+      }
+
+      .btn-kbd-dark {
+        font-family: var(--mono);
+        font-size: 9px;
+        padding: 1px 5px;
+        border-radius: 3px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        letter-spacing: 0.05em;
+        line-height: 1.4;
+        pointer-events: none;
+      }
 
       .fuel-missed {
         width: 100px;
@@ -536,22 +584,25 @@
             <span id="errorText">Please fill in all required pieces.</span>
           </div>
 
-          <div class="section-label">Fuel</div>
+          <div class="fuel-section-header">
+            <div class="section-label">Fuel</div>
+            <button type="button" id="undoButton" class="undo-btn" aria-label="Undo last fuel change" style="display:none;">↩ undo <kbd class="btn-kbd-dark">Z</kbd></button>
+          </div>
           <div class="fuel-row">
             <div class="fuel-scored-group">
               <button type="button" class="fuel-button" id="fuelButton" aria-label="Increase fuel scored by 1">
-                <div class="fuel-button-label">Fuel scored</div>
+                <div class="fuel-button-label">Fuel scored <kbd class="btn-kbd">1</kbd></div>
                 <div class="fuel-button-sub">Tap for +1 during teleop</div>
                 <div id="fuelValue" class="fuel-count">0</div>
               </button>
               <div class="fuel-quick-row">
-                <button type="button" class="fuel-quick" id="fuelPlus5Button" aria-label="Increase fuel scored by 5">+5</button>
-                <button type="button" class="fuel-quick" id="fuelPlus10Button" aria-label="Increase fuel scored by 10">+10</button>
+                <button type="button" class="fuel-quick" id="fuelPlus5Button" aria-label="Increase fuel scored by 5">+5 <kbd class="btn-kbd">5</kbd></button>
+                <button type="button" class="fuel-quick" id="fuelPlus10Button" aria-label="Increase fuel scored by 10">+10 <kbd class="btn-kbd">0</kbd></button>
               </div>
             </div>
             <button type="button" class="fuel-missed" id="fuelMissedButton" aria-label="Increase missed fuel">
               <div>
-                <div class="fuel-missed-label">Missed</div>
+                <div class="fuel-missed-label">Missed <kbd class="btn-kbd-dark">M</kbd></div>
                 <div class="fuel-missed-sub">Shots that did not score</div>
               </div>
               <div id="fuelMissedValue" class="fuel-missed-count">0</div>
@@ -602,7 +653,7 @@
           <div class="actions">
             <button id="saveButton" class="primary-button" type="button">
               Save log &amp; go to dashboard
-              <!-- <span class="primary-button-kbd">Enter ↵</span> -->
+              <span class="primary-button-kbd">Enter ↵</span>
             </button>
             <div class="helper">Logs are stored in this browser only. Clearing site data clears old seasons.</div>
           </div>
@@ -667,8 +718,26 @@
         set("summaryTeamNumber", values.teamNumber || "—");
         set("summaryScoutProfile", values.scoutProfile || "—");
         set("summaryAutoFuel", String(values.autoFuel ?? 0));
-        set("summaryAutoClimb", values.autoClimb === "yes" ? "Yes" : values.autoClimb === "no" ? "No" : "—");
+        const climbLabels = { low: "Low", mid: "Mid", high: "High", none: "None" };
+        set("summaryAutoClimb", climbLabels[values.autoClimb] || "—");
         set("summaryAutoNotes", (values.autoNotes || "").trim() || "—");
+      }
+
+      const fuelHistory = [];
+
+      function pushHistory() {
+        fuelHistory.push({ fuel: values.fuel, fuelMissed: values.fuelMissed });
+        document.getElementById("undoButton").style.display = "";
+      }
+
+      function undoFuel() {
+        if (!fuelHistory.length) return;
+        const prev = fuelHistory.pop();
+        values.fuel = prev.fuel;
+        values.fuelMissed = prev.fuelMissed;
+        updateFuelUI();
+        showToast("Undone");
+        if (!fuelHistory.length) document.getElementById("undoButton").style.display = "none";
       }
 
       function updateFuelUI() {
@@ -684,10 +753,11 @@
       }
 
       function bindInteractions() {
-        document.getElementById("fuelButton").addEventListener("click", () => { values.fuel++; updateFuelUI(); });
-        document.getElementById("fuelPlus5Button").addEventListener("click", () => { values.fuel += 5; updateFuelUI(); });
-        document.getElementById("fuelPlus10Button").addEventListener("click", () => { values.fuel += 10; updateFuelUI(); });
-        document.getElementById("fuelMissedButton").addEventListener("click", () => { values.fuelMissed++; updateFuelUI(); });
+        document.getElementById("fuelButton").addEventListener("click", () => { pushHistory(); values.fuel++; updateFuelUI(); });
+        document.getElementById("fuelPlus5Button").addEventListener("click", () => { pushHistory(); values.fuel += 5; updateFuelUI(); });
+        document.getElementById("fuelPlus10Button").addEventListener("click", () => { pushHistory(); values.fuel += 10; updateFuelUI(); });
+        document.getElementById("fuelMissedButton").addEventListener("click", () => { pushHistory(); values.fuelMissed++; updateFuelUI(); });
+        document.getElementById("undoButton").addEventListener("click", undoFuel);
 
         document.querySelectorAll("[data-intake]").forEach(btn =>
           btn.addEventListener("click", () => { values.intakeType = btn.getAttribute("data-intake"); updateChipsUI(); }));
@@ -700,7 +770,12 @@
         window.addEventListener("keydown", e => {
           const active = document.activeElement;
           if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
-          // if (e.key === "Enter") { e.preventDefault(); handleSave(); }
+          if (e.key === "1") { e.preventDefault(); pushHistory(); values.fuel++; updateFuelUI(); }
+          else if (e.key === "5") { e.preventDefault(); pushHistory(); values.fuel += 5; updateFuelUI(); }
+          else if (e.key === "0") { e.preventDefault(); pushHistory(); values.fuel += 10; updateFuelUI(); }
+          else if (e.key === "m" || e.key === "M") { e.preventDefault(); pushHistory(); values.fuelMissed++; updateFuelUI(); }
+          else if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoFuel(); }
+          else if (e.key === "Enter") { e.preventDefault(); handleSave(); }
         });
       }
 

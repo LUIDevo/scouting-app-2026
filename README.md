@@ -1,4 +1,4 @@
-# Team 6632's FRC Scouting App 2026
+# FRC Scouting App 2026
 <img width="1446" height="1022" alt="image" src="https://github.com/user-attachments/assets/7bc67cde-eb00-4dfe-9708-3dfaebfec22e" />
 
 This app is designed for all devices, including mobile.

@@ -1,6 +1,8 @@
 # FRC Scouting App 2026
 <img width="1446" height="1022" alt="image" src="https://github.com/user-attachments/assets/7bc67cde-eb00-4dfe-9708-3dfaebfec22e" />
 
+This app was made for FRC 2026 scouting at multiple events, and was used by a team of over 40 people.
+
 This app is designed for all devices, including mobile.
 
 Simply visit the Github Page, https://luidevo.github.io/scouting-app-2026/dashboard.html, wait a few seconds, and the app will work offline (but you must have visited the site first while online).

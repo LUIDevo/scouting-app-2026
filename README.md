@@ -1,7 +1,10 @@
 # FRC Scouting App 2026
 <img width="1446" height="1022" alt="image" src="https://github.com/user-attachments/assets/7bc67cde-eb00-4dfe-9708-3dfaebfec22e" />
 
-This app was made for FRC 2026 scouting at multiple events, and was used by a team of over 40 people.
+This app was designed for easier report logging for FRC, a robotics organisation. This app was used throughout the 2025/2026 season at several competitions, and was used by a team of around 40 people.
+
+
+# README
 
 This app is designed for all devices, including mobile.
 

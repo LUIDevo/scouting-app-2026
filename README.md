@@ -3,6 +3,12 @@
 
 This app was designed for easier report logging for FRC, a robotics organisation. This app was used throughout the 2025/2026 season at several competitions, and was used by a team of around 40 people.
 
+Core features of the app:
+- Ability to run offline without a manual app download
+- Runs on all devices
+- Syncing to a secured backend
+- Ability to change logs after finishing
+- Several Quality-of-Life features like auto inputting throughout matches
 
 # README
 
